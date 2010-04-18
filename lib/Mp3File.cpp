@@ -620,13 +620,10 @@ BOOL CMp3File::ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data, cons
 
 BOOL CMp3File::ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit, info_lists *pInfoLists, BOOL bDisableCache, CMp3File::sink *pHelp)
 {
-
   MYASSERT(m_pFile);
 
   //Prelims...
-  lstrcpy(data_out.path, m_tsFname.c_str());
-
-  
+  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
 
   //cache stuff
 #ifdef XXX
@@ -681,7 +678,7 @@ BOOL CMp3File::ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit, inf
 
   tstring label = GetLabels(data_out.xing_header);
   if (!label.empty())
-    lstrcpy(data_out.label,label.c_str());
+    lstrcpyn(data_out.label,label.c_str(), sizeof(data_out.label)/sizeof(data_out.label[0]));
   else
     data_out.label[0] = 0;
 

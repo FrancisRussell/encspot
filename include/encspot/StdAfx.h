@@ -20,8 +20,7 @@ typedef unsigned long DWORD;
 
 #define MAX_PATH          260
 
-#define lstrcpy		strcpy
-#define lstrcat		strcat
+#define lstrcpyn	strncpy
 
 #define USES_CONVERSION
 
