@@ -10,7 +10,6 @@
 #export DH_VERBOSE=1
 
 makefiles: makefiles-stamp
-
 makefiles-stamp:
 	dh_testdir
 	cmake .
@@ -20,9 +19,9 @@ clean:  makefiles
 	dh_testdir
 	make clean
 	dh_clean
+	rm -f build-stamp
 
 build: build-stamp
-
 build-stamp: makefiles
 	$(MAKE)
 	touch $@
@@ -51,3 +50,5 @@ binary-arch:
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
+.PHONY: makefiles clean build install binary binary-indep binary-arch
