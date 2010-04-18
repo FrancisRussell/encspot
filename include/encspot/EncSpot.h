@@ -1,11 +1,7 @@
-// EncSpot.h
 #ifndef ENCSPOT_ENCSPOT_H
 #define ENCSPOT_ENCSPOT_H
 
 #include "mp3structs.h"
-
-
-//#define MYFUNCTION (void (__cdecl *)(struct mp3data &,struct HWND__ *))
 
 extern const long freqs[9];
 extern TCHAR g_version[256];

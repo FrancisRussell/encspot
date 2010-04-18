@@ -107,10 +107,6 @@ public:
 	virtual ~CID3Tag();
 
 private:
-	
- 
-	
-	
 
 };
 
