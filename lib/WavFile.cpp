@@ -17,6 +17,10 @@ BOOL CWavFile::ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit)
 {
   MYASSERT(m_pFile);
 
+  //Prelims...
+  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
+  
+
   //read data.
   WAVDATA wavdata;
   int read = fread(&wavdata, 1, sizeof(WAVDATA), m_pFile);

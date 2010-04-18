@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <sys/stat.h>
 
 extern const char *const genre_names[];
 extern const int tabsel_123[2][3][16];
@@ -241,6 +242,10 @@ struct mp3data
 
   int mpp_stream_version;
   int  mpp_stream_profile;
+
+  //useful stuff...
+  TCHAR path[MAX_PATH];
+  struct stat file_status;
 };
 
 

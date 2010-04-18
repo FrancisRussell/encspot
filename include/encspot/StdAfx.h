@@ -18,19 +18,18 @@ typedef int64_t INT64;
 typedef unsigned long DWORD;
 #define _T(x) x
 
-#define MAX_PATH        260
+#define MAX_PATH          260
 
-#define lstrcpyn        strncpy
-#define _stat           stat
+#define lstrcpyn	strncpy
 
 #define USES_CONVERSION
 
 #define MessageBox(a,b,c,d) printf(b)
 
-#define	_tremove        remove
-#define _trename        rename
-#define	_tfopen         fopen
-#define _stprintf       sprintf
+#define	_tremove	remove
+#define _trename	rename
+#define	_tfopen		fopen
+#define _stprintf	sprintf
 
 char* itoa10(const int value, char* const string);
 typedef std::basic_string<TCHAR> tstring ;
