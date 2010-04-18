@@ -249,8 +249,6 @@ int	CMp3File::SeekLastHeader(BYTE *final10)
 	MYASSERT(m_pFile);
 	const int finalsize = 10; 
 
-	int pos = ftell(m_pFile);
-	
 	fseek(m_pFile, 0, SEEK_END);
 	int fsize = ftell(m_pFile);
 
@@ -460,10 +458,6 @@ BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const std::ve
 
 
 	}
-
-
-
-	int test = ftell(pNewFile);
 
 	int nStopSize = m_nFilesize;
 	if (!bID3 && data.bId3v1Tag)
@@ -1066,7 +1060,6 @@ int CMp3File::UpdateInfoFromHeader(mp3data &out_data, const mp3header &hHeader)
 	{
 
 		int test;
-		int pos = ftell(m_pFile);
 		if (hHeader.mode==3) 
 			test = readBits(5); // private_bits
 		else 
@@ -1600,7 +1593,6 @@ int CMp3File::GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp)
 	//first: how long is this frame??
 	int nHead;
 	BYTE b[4];
-	int nPos = ftell(m_pFile);
 	fseek(m_pFile, data.first_frame_pos,SEEK_SET);
 	fread(b,1,4,m_pFile);
 	nHead = ReadInt(b);
@@ -1794,17 +1786,10 @@ int CMp3File::GetXingHeader(mp3data &data,  unsigned char *buf)
 
 BOOL CMp3File::GetVBRIHeader(mp3data &data, unsigned char *buf)
 {
-
-	int nInitPos = ftell(m_pFile);
-
-	
 	VBRIDATA *X = &data.vbri_header;
 
 //	int i, head_flags;
 	int h_id, h_mode, h_sr_index;
-	static int sr_table[4] = { 44100, 48000, 32000, 99999 };
-
-	unsigned char *buf_start = buf;
 
 	// get Xing header data
 
@@ -1944,7 +1929,6 @@ BOOL CMp3File::UpdateID3v1(id3v1 tag, int track)
 	{
 		/*m_pFile = fopen(m_tsFname.c_str(), "wb");*/
 		int succ = fseek(m_pFile, 0, SEEK_END);
-		int newpos = ftell(m_pFile);
 	}
 	else
 	{
@@ -1955,7 +1939,6 @@ BOOL CMp3File::UpdateID3v1(id3v1 tag, int track)
 	if (track!=0)
 		tag.comment[29] = track;
 	int written = fwrite(&tag, 1, sizeof(id3v1), m_pFile);
-
 
 	return TRUE;
 
@@ -1969,7 +1952,7 @@ BOOL CMp3File::AppendMP3(mp3data datain1, tstring path2, tstring pathout, BOOL b
 
 
 	id3v1 tag;
-	int track;
+	int track = 0;
 	if (bID1)
 	{
 		track = datain1.id3v1_track;
