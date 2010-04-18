@@ -1,14 +1,11 @@
 // EncSpot.h
-
-
-#pragma once
+#ifndef ENCSPOT_ENCSPOT_H
+#define ENCSPOT_ENCSPOT_H
 
 #include "mp3structs.h"
 
 
 //#define MYFUNCTION (void (__cdecl *)(struct mp3data &,struct HWND__ *))
-
-
 
 extern const long freqs[9];
 extern TCHAR g_version[256];
@@ -78,3 +75,5 @@ BOOL MyPathIsDirectory(LPCTSTR path);
 #define ID_ID3_TRACK	204
 #define ID_ID3_COMMENT	205
 #define ID_ID3_GENRE	206
+
+#endif

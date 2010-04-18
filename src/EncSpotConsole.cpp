@@ -1,3 +1,5 @@
+#include <vector>
+#include <string>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 

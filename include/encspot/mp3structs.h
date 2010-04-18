@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENCSPOT_MP3STRUCTS_H
+#define ENCSPOT_MP3STRUCTS_H
+
 #include <sys/stat.h>
 
 extern const char *const genre_names[];
@@ -384,3 +386,4 @@ extern column_map_type g_column_map;
 #define MPG_MD_DUAL_CHANNEL 2
 #define MPG_MD_MONO         3
 
+#endif

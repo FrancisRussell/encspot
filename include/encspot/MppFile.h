@@ -1,13 +1,5 @@
-// MppFile.h: interface for the CMppFile class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_MPPFILE_H__C6A5B6D6_3E7B_467E_A3BB_AADA8D427B71__INCLUDED_)
-#define AFX_MPPFILE_H__C6A5B6D6_3E7B_467E_A3BB_AADA8D427B71__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef ENCSPOT_MPPFILE_H
+#define ENCSPOT_MPPFILE_H
 
 #include "mp3structs.h"
 #include "MediaFile.h"
@@ -39,4 +31,4 @@ public:
 
 };
 
-#endif // !defined(AFX_MPPFILE_H__C6A5B6D6_3E7B_467E_A3BB_AADA8D427B71__INCLUDED_)
+#endif

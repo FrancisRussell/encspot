@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENCSPOT_MP3FILE_H
+#define ENCSPOT_MP3FILE_H
 
 #include "ID3tag.h"
 #include "mp3structs.h"
@@ -137,3 +138,4 @@ private:
 
 };
 
+#endif

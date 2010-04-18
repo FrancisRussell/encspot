@@ -1,13 +1,5 @@
-// MediaFile.h: interface for the CMediaFile class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_MEDIAFILE_H__66ACAE63_4E3D_44F9_8F46_F1D232178AD3__INCLUDED_)
-#define AFX_MEDIAFILE_H__66ACAE63_4E3D_44F9_8F46_F1D232178AD3__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef ENCSPOT_MEDIAFILE_H
+#define ENCSPOT_MEDIAFILE_H
 
 class CMediaFile  
 {
@@ -35,4 +27,4 @@ public:
 
 };
 
-#endif // !defined(AFX_MEDIAFILE_H__66ACAE63_4E3D_44F9_8F46_F1D232178AD3__INCLUDED_)
+#endif

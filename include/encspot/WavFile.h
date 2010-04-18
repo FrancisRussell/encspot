@@ -1,13 +1,5 @@
-// WavFile.h: interface for the CWavFile class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_WAVFILE_H__29400D4E_76A7_43B5_AA24_D6F1C35F650B__INCLUDED_)
-#define AFX_WAVFILE_H__29400D4E_76A7_43B5_AA24_D6F1C35F650B__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef ENCSPOT_WAVFILE_H
+#define ENCSPOT_WAVFILE_H
 
 #include <encspot/MediaFile.h>
 #include <encspot/mp3structs.h>
@@ -51,4 +43,4 @@ public:
 
 };
 
-#endif // !defined(AFX_WAVFILE_H__29400D4E_76A7_43B5_AA24_D6F1C35F650B__INCLUDED_)
+#endif

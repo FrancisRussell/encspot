@@ -1,14 +1,5 @@
-// ID3tag.h: interface for the CID3tag class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_ID3TAG_H__8EE528D0_99D1_4FA3_A828_26C287B86D93__INCLUDED_)
-#define AFX_ID3TAG_H__8EE528D0_99D1_4FA3_A828_26C287B86D93__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
+#ifndef ENCSPOT_ID3TAG_H
+#define ENCSPOT_ID3TAG_H
 
 #include <cstring>
 #include <cstdlib>
@@ -121,4 +112,4 @@ private:
 
 };
 
-#endif // !defined(AFX_ID3TAG_H__8EE528D0_99D1_4FA3_A828_26C287B86D93__INCLUDED_)
+#endif
