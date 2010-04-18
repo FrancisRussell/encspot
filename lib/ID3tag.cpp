@@ -219,7 +219,7 @@ void CID3Tag::MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, c
   if (frame_num==-1)
   {
     CFrame frame;
-    lstrcpy(frame.id, "GEOB");
+    strncpy(frame.id, "GEOB", sizeof(frame.id));
     m_frames.push_back(frame);
     frame_num = m_frames.size()-1;
   }
@@ -317,7 +317,7 @@ void CID3Tag::MakeTextFrame(const std::string szID, const std::string &data)
   if (frame_num==-1)
   {
     CFrame frame;
-    lstrcpy(frame.id, szID.c_str());
+    strncpy(frame.id, szID.c_str(), sizeof(frame.id));
     m_frames.push_back(frame);
     frame_num = m_frames.size()-1;
   }
