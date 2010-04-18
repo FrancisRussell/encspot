@@ -370,8 +370,8 @@ struct COLUMNDATA
 	BOOL	full_scan;
 
 	COLUMNDATA(tstring n, tstring d, tstring g, int oi, int ois, int lcw, int hcw,tstring align,BOOL bfs) :
-		name(n), description(d), group(g), offset_int(oi), offset_string(ois),
-		list_col_width(lcw), html_col_width(hcw), alignment(align), full_scan(bfs) {}
+		name(n), description(d), group(g), alignment(align), offset_int(oi), offset_string(ois),
+		list_col_width(lcw), html_col_width(hcw), full_scan(bfs) {}
 
 
 	COLUMNDATA() : offset_int(-1),offset_string(-1), list_col_width(-1), html_col_width(-1), full_scan(TRUE) {}
