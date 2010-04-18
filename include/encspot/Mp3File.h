@@ -107,7 +107,7 @@ private:
     
     
   int            GuessFrameLength();
-  BOOL        ProcessNextFrame(mp3data &data_out,info_lists *pInfoLists);
+  int        ProcessNextFrame(mp3data &data_out,info_lists *pInfoLists);
   tstring        GetLabelsFromBuffer(const char *buff, int len);
   tstring        ReportOutOfSyncError(mp3data &main_data, const mp3header &hHeader);
   BOOL        CheckDone(mp3data &data, int pos);

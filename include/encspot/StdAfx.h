@@ -4,12 +4,23 @@
 #include <string>
 #include <stdint.h>
 
+
+///FIXME: check to see if this actually works under windows
+#ifdef __WIN32__
+
+#define UNICODE
+#define _UNICODE
+#include <windows.h>
+#include <tchar.h>
+
+#else
+
 typedef unsigned short WORD;
 typedef char TCHAR;
 typedef char CHAR;
-typedef int BOOL;
-static const BOOL TRUE=1;
-static const BOOL FALSE=0;
+typedef bool BOOL;
+static const BOOL TRUE = true;
+static const BOOL FALSE = false;
 typedef unsigned char BYTE;
 typedef uint16_t UINT16;
 typedef int16_t INT16;
@@ -19,8 +30,6 @@ typedef unsigned long DWORD;
 
 #define MAX_PATH          260
 #define MessageBox(a,b,c,d) printf(b)
-#define MYASSERT(expr) 
-#define LOG(expr) 
 
 #define _T(x) x
 #define USES_CONVERSION
@@ -31,6 +40,11 @@ typedef unsigned long DWORD;
 #define _trename	rename
 #define	_tfopen		fopen
 #define _sntprintf	snprintf
+
+#endif
+
+#define MYASSERT(expr) 
+#define LOG(expr) 
 
 TCHAR* itot10(const int value, TCHAR* const string, const std::size_t size);
 typedef std::basic_string<TCHAR> tstring ;
