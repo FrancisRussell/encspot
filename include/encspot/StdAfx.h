@@ -40,6 +40,7 @@ typedef unsigned long DWORD;
 #define _trename	rename
 #define	_tfopen		fopen
 #define _sntprintf	snprintf
+#define _tmain          main
 
 #endif
 

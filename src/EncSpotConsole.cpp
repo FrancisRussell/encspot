@@ -15,7 +15,7 @@ static tstring Trim(tstring arg)
 }
 
 
-int main(int argc, char* argv[])
+int _tmain(int argc, TCHAR* argv[])
 {
   std::vector<tstring> list;
   for (int i = 1;i<argc;i++)
