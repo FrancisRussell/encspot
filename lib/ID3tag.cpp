@@ -343,12 +343,10 @@ int CID3Tag::GetFrameNumber(const std::string id)
 
 BOOL CID3Tag::CreateNewSpace(int nSpace, iProgCallback *pCallback)
 {
-
-  char tpath[MAX_PATH];
-  lstrcpy(tpath,m_sFname.c_str());
-  lstrcat(tpath,"_tmp");
+  tstring tpath(m_sFname);
+  tpath += _T("_tmp");
   FILE *pTfile = NULL;
-  pTfile = _tfopen(tpath,"wb");
+  pTfile = _tfopen(tpath.c_str(), _T("wb"));
   if (pTfile == NULL) 
   {
     MessageBox(GetActiveWindow(), "Unable to open temp file for writing",NULL,NULL);
@@ -392,7 +390,7 @@ BOOL CID3Tag::CreateNewSpace(int nSpace, iProgCallback *pCallback)
         fclose(pTfile);
 
         //delete temp file
-        _tremove(tpath);
+        _tremove(tpath.c_str());
         return FALSE;
       }
     }
@@ -402,7 +400,7 @@ BOOL CID3Tag::CreateNewSpace(int nSpace, iProgCallback *pCallback)
   fclose(pOld);
   fclose(pTfile);
 
-  if (_tremove(m_sFname.c_str())!=0 || _trename(tpath,m_sFname.c_str())!=0)
+  if (_tremove(m_sFname.c_str())!=0 || _trename(tpath.c_str(),m_sFname.c_str())!=0)
     MessageBox(GetActiveWindow(), _T("Failed to add new space to file for some reason..."),_T("Error"), 0);
   //FileOp(tpath, m_sFname.c_str(),FO_RENAME);
 
