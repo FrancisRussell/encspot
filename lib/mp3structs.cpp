@@ -161,7 +161,7 @@ void mp3data_string::update_id3v1(const mp3data &data)
   if (data.bId3v1Tag)
   {
   
-    id3v1_track = itoa10(data.id3v1_track,b);
+    id3v1_track = itot10(data.id3v1_track,b,2);
 
     int nGen = data.id3v1tag.genre;
     if (nGen < (sizeof(genre_names)/sizeof(char *)))
@@ -193,7 +193,7 @@ int mp3data_string::update_mpp(const mp3data &data, BOOL monoquality)
   TCHAR b[4];
 
   mpp_stream_version = _T("SV");
-  mpp_stream_version+=itoa10(data.mpp_stream_version,b);
+  mpp_stream_version+=itot10(data.mpp_stream_version,b,4);
 
   if (data.mpp_stream_profile <= 4)
     mpp_stream_profile = profs[data.mpp_stream_profile];
@@ -231,11 +231,11 @@ void mp3data_string::update_lame(const mp3data &data)
   tstring infreqs[]={_T("32kHz or less"), _T("44.1kHz"), _T("48kHz"), _T("more than 48kHz") };
 
   TCHAR b[100];
-  lame_vbr_scale      = itoa10(xing.vbr_scale,b);
-  lame_tag_revision    = itoa10(xing.tag_revision,b);
+  lame_vbr_scale      = itot10(xing.vbr_scale,b,100);
+  lame_tag_revision    = itot10(xing.tag_revision,b,100);
   lame_vbr_method      = vbr_methods[xing.vbr_method];
   if (xing.lowpass)
-    lame_lowpass    = itoa10(xing.lowpass,b);
+    lame_lowpass    = itot10(xing.lowpass,b,100);
   else
     lame_lowpass    = _T("Unknown");
 
@@ -244,16 +244,16 @@ void mp3data_string::update_lame(const mp3data &data)
   lame_nogapcontinued    = (xing.encoding_flags & 4)?_T("yes"):_T("no");
   lame_nogapcontinuation  = (xing.encoding_flags & 8)?_T("yes"):_T("no");
 
-  lame_athtype      = itoa10(xing.ath_type,b);
+  lame_athtype      = itot10(xing.ath_type,b,100);
   
   if (xing.abr_bitrate == 0xFF)
     lame_abr_bitrate  =  _T("255 or more");
   else if (xing.abr_bitrate)
-    lame_abr_bitrate  = itoa10(xing.abr_bitrate,b);
+    lame_abr_bitrate  = itot10(xing.abr_bitrate,b,100);
   else
     lame_abr_bitrate  = _T("Unknown");
 
-  lame_noise_shaping    = itoa10(xing.noise_shaping,b);
+  lame_noise_shaping    = itot10(xing.noise_shaping,b,100);
   lame_unwise        = xing.unwise?_T("yes"):_T("no");
   lame_input_freq      = infreqs[xing.input_freq];
   lame_stereo_mode    = modes[xing.stereo_mode];
@@ -269,13 +269,13 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
   length    = convert_time(data.length);
 
   //frames
-  frames = itoa10(data.frameCount,b);
+  frames = itot10(data.frameCount,b,100);
   if (!data.all_read)
     frames+=_T("+");
 
   //filesize
 
-  fsize = itoa10(data.fsize,b);
+  fsize = itot10(data.fsize,b,100);
   if (data.fsize > 999)
   {
     fsize.insert(fsize.size() - 3,_T(","));
@@ -284,8 +284,8 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
   }
 
   mode    = get_mode(data.mode);
-  bitrate = itoa10(data.bitrate, b);
-  freq    = itoa10(data.base_freq, b);
+  bitrate = itot10(data.bitrate, b, 100);
+  freq    = itot10(data.base_freq, b, 100);
 
 
   //mp+
@@ -326,7 +326,7 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
     scale = data.scalefac * 100.0;
     scale/= (grancount * nch * data.frameCount);
     TCHAR b[256];
-    _stprintf(b,_T("%.1f%%"), scale);
+    _sntprintf(b,256,_T("%.1f%%"), scale);
     scalefac = b;
   }
     
@@ -341,9 +341,9 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
   //cut
   bad_last_frame = get_complete(data);
 
-  max_reservoir  = itoa10(data.max_reservoir,b);
-  av_reservoir  = itoa10(data.av_reservoir,b);
-  sync_errors  = itoa10(data.sync_errors, b);
+  max_reservoir  = itot10(data.max_reservoir,b, 100);
+  av_reservoir  = itot10(data.av_reservoir,b, 100);
+  sync_errors  = itot10(data.sync_errors, b, 100);
 
   //uses data already calculated
   int quality      = get_quality(data, monoquality);
@@ -368,11 +368,11 @@ tstring mp3data_string::convert_time(const double secs)
   int wMinute = (s / 60) % 60;
   int wHour   = s / (60 * 60);
   tstring ret;
-  _stprintf(b,_T("%02i:%02i:%02i"),wHour,wMinute,wSecond);
+  _sntprintf(b,16,_T("%02i:%02i:%02i"),wHour,wMinute,wSecond);
   ret = b;  
   int milli = ((int)((secs - s) * 1000))/100; 
   if (s < 10)
-    ret+=_T(".")+tstring(itoa10(milli,b));
+    ret+=_T(".")+tstring(itot10(milli,b,16));
   return ret;
 }
 
@@ -611,9 +611,7 @@ tstring  mp3data_string::get_report(mp3data data, tstring version)
 
     if (count>0)
     {
-  
-    
-      _stprintf(buff,_T("%i"), brate_value);
+      _sntprintf(buff,256,_T("%i"), brate_value);
       tstring value = buff;
       value = tstring(std::max<int>(3 - value.size(),0),_T(' ')) + value + _T("     ");   
       out+=value;
@@ -622,7 +620,7 @@ tstring  mp3data_string::get_report(mp3data data, tstring version)
       out+=tstring(num_bars,'|');
       out+=tstring(45 - num_bars,' ');
 
-      _stprintf(buff,_T("%.1f%%"),float(count * 100) / data.frameCount);
+      _sntprintf(buff,256,_T("%.1f%%"),float(count * 100) / data.frameCount);
       tstring percent = buff;
       percent = tstring(std::max<int>(7 - percent.size(),0),_T(' ')) + percent;
       out+=percent;

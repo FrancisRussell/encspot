@@ -5,9 +5,9 @@
 #include <cstdio>
 #include <encspot/StdAfx.h>
 
-char* itoa10(const int value, char* const string)
+TCHAR* itot10(const int value, TCHAR* const string, const std::size_t size)
 {
-  sprintf(string, "%d", value);
+  _sntprintf(string, size, "%d", value);
   return string;
 }
 
