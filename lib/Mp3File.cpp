@@ -622,17 +622,15 @@ BOOL CMp3File::ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit, inf
 {
   MYASSERT(m_pFile);
 
-  //Prelims...
-  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
-
   //cache stuff
 #ifdef XXX
-  _stat(m_tsFname.c_str(), &data_out.file_status);
+  stat file_status;
+  _stat(m_tsFname.c_str(), &file_status);
 
   //maybe we get lucky and get a cache hit:
   mp3data datatemp;
   memset(&datatemp, 0, sizeof(datatemp));
-  if (!bDisableCache && g_pCache && g_pCache->Find(m_tsFname, data_out.file_status, datatemp, nFrameLimit))
+  if (!bDisableCache && g_pCache && g_pCache->Find(m_tsFname, &file_status, datatemp, nFrameLimit))
   {
     data_out = datatemp;
     
