@@ -1,8 +1,6 @@
 #ifndef ENCSPOT_STDAFX_H
 #define ENCSPOT_STDAFX_H
 
-#pragma warning(disable : 4786 )
-
 #include <string>
 #include <stdint.h>
 
