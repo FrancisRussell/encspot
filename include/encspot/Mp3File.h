@@ -1,6 +1,7 @@
 #ifndef ENCSPOT_MP3FILE_H
 #define ENCSPOT_MP3FILE_H
 
+#include <vector>
 #include "ID3tag.h"
 #include "mp3structs.h"
 
@@ -82,8 +83,8 @@ public:
 	int		GetFilesize() { return m_nFilesize;	}
 	float	GetAverageBitrate(const mp3data &data);
 	BOOL	ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit,info_lists *pInfoLists,BOOL bDisableCache,CMp3File::sink *pHelp = NULL);
-	BOOL	Trim(INT64 nStart, INT64 nStop,const mp3data &data,const vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
-	BOOL	ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data,const vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
+	BOOL	Trim(INT64 nStart, INT64 nStop,const mp3data &data,const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
+	BOOL	ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data,const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
 	BOOL	AppendMP3(mp3data datain1, tstring path2, tstring pathout, BOOL bID1, BOOL bID2, CMp3File::sink_mini *pHelp);
 	CMp3File();
 	virtual ~CMp3File();

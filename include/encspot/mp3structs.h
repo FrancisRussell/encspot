@@ -1,6 +1,8 @@
 #ifndef ENCSPOT_MP3STRUCTS_H
 #define ENCSPOT_MP3STRUCTS_H
 
+#include <vector>
+#include <map>
 #include <sys/stat.h>
 
 extern const char *const genre_names[];
@@ -146,13 +148,13 @@ typedef struct {
 
 struct info_lists
 {
-	vector<int>		bigvalues;
-	vector<BOOL>	scalefac;
-	vector<BYTE>	bitlist;
-	vector<int>		reslist;
-	vector<BOOL>	modelist;
-	vector<BOOL>	blocklist;
-	vector<int>		byte_location;		//location of frame in file.
+	std::vector<int>		bigvalues;
+	std::vector<BOOL>	scalefac;
+	std::vector<BYTE>	bitlist;
+	std::vector<int>		reslist;
+	std::vector<BOOL>	modelist;
+	std::vector<BOOL>	blocklist;
+	std::vector<int>		byte_location;		//location of frame in file.
 };
 
 /*struct xing
@@ -376,7 +378,7 @@ struct COLUMNDATA
 };
 
 
-typedef map<DWORD, COLUMNDATA> column_map_type;
+typedef std::map<DWORD, COLUMNDATA> column_map_type;
 typedef column_map_type::iterator column_iterator;
 extern column_map_type g_column_map;
 

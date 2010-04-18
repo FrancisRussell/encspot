@@ -2,6 +2,7 @@
 //	EncSpotStaticLib.pch will be the pre-compiled header
 //	stdafx.obj will contain the pre-compiled type information
 
+#include <cstdio>
 #include <encspot/StdAfx.h>
 
 char* itoa10(const int value, char* const string)

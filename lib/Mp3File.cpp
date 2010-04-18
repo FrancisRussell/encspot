@@ -2,6 +2,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <string>
+#include <vector>
+#include <algorithm>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
@@ -265,7 +268,7 @@ int	CMp3File::SeekLastHeader(BYTE *final10)
         int i;
 	for (i = 0;i<5;i++)
 	{
-		int back_pos = min(fsize, 65536 * 5);
+		int back_pos = std::min(fsize, 65536 * 5);
 		fseek(m_pFile, -back_pos, SEEK_END);
 
 		if (SeekNextHeader()!=-1)
@@ -332,7 +335,7 @@ int	CMp3File::SeekLastHeader(BYTE *final10)
 //times in ms
 //frame_length in s
 //byte_locations: byte location of each frame.
-BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink)		
+BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink)		
 {
 	MYASSERT(m_pFile);
 
@@ -404,13 +407,13 @@ BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const vector<
 			BYTE *pb = new BYTE[nFramesize];
 			fseek(m_pFile, nPos, SEEK_SET);
 			fread(pb,1,nFramesize,m_pFile);
-			string buffer((char *)pb, nFramesize);
+			std::string buffer((char *)pb, nFramesize);
 	
 
 			int startpos = buffer.find("Xing");
-			if (startpos==string::npos)
+			if (startpos==std::string::npos)
 				startpos = buffer.find("Info");
-			if (startpos!=string::npos )
+			if (startpos!=std::string::npos )
 			{
 
 				if (data.xing_header.flags & FRAMES_FLAG)
@@ -512,7 +515,7 @@ BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const vector<
 //times in ms
 //frame_length in s
 //byte_locations: byte location of each frame.
-BOOL CMp3File::ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data, const vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink)		
+BOOL CMp3File::ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data, const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink)		
 {
 	MYASSERT(m_pFile);
 
@@ -585,13 +588,13 @@ BOOL CMp3File::ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data, cons
 			BYTE *pb = new BYTE[nFramesize];
 			fseek(m_pFile, nPos, SEEK_SET);
 			fread(pb,1,nFramesize,m_pFile);
-			string buffer((char *)pb, nFramesize);
+			std::string buffer((char *)pb, nFramesize);
 	
 
 			int startpos = buffer.find("Xing");
-			if (startpos==string::npos)
+			if (startpos==std::string::npos)
 				startpos = buffer.find("Info");
-			if (startpos!=string::npos )
+			if (startpos!=std::string::npos )
 			{
 
 				if (data.xing_header.flags & FRAMES_FLAG)
@@ -1346,17 +1349,17 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, int len)
 {
 	USES_CONVERSION;
 
-	string b(buff,len);
+	std::string b(buff,len);
 	int pos = b.find("LAME");
 
-	string protag = "RCA mp3PRO Encoder";
-	string protag2 = "THOMSON mp3PRO Encoder ";
+	std::string protag = "RCA mp3PRO Encoder";
+	std::string protag2 = "THOMSON mp3PRO Encoder ";
 	int pos_pro = b.find(protag);
 	int pos_pro2 = b.find(protag2);
 
 	tstring label;
 
-	if ( (pos!=string::npos) && (pos < (sizeof(buff) - 11)))
+	if ( (pos!=std::string::npos) && (pos < (sizeof(buff) - 11)))
 	{
 		CHAR version[256];
 		lstrcpy(version, b.substr(pos+4,4).c_str());
@@ -1368,23 +1371,23 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, int len)
 
 		label = _T("LAME")+ tstring(A2T(version))+tag;
 	}
-	else if ( (pos_pro!=string::npos) && (pos_pro < (sizeof(buff) - 8)))
+	else if ( (pos_pro!=std::string::npos) && (pos_pro < (sizeof(buff) - 8)))
 	{
 		CHAR version[256];
 		lstrcpy(version, b.substr(pos_pro+protag.size(),5).c_str());
 		label = _T("RCA ")+ tstring(A2T(version));
 	}
-	else if ( (pos_pro2!=string::npos) && (pos_pro2 < (sizeof(buff) - 29)))
+	else if ( (pos_pro2!=std::string::npos) && (pos_pro2 < (sizeof(buff) - 29)))
 	{
 		CHAR version[256];
 		lstrcpy(version, b.substr(pos_pro2+protag2.size(),6).c_str());
 		label = _T("Thomson ")+ tstring(A2T(version));
 	}
-	else if (b.find("VBRI")!=string::npos)
+	else if (b.find("VBRI")!=std::string::npos)
 		label =  _T("VBRI");
-	else if (b.find("MPGE")!=string::npos)
+	else if (b.find("MPGE")!=std::string::npos)
 		label =  _T("MPGE");
-	else if (b.find("GOGO")!=string::npos)
+	else if (b.find("GOGO")!=std::string::npos)
 		label =  _T("GOGO");
 	
 	return TranslateLabel(label);
@@ -1535,7 +1538,7 @@ bool CMp3File::IsMp3File(tstring fname)
 tstring CMp3File::TranslateLabel(tstring label)
 {
 
-	if (label.find("LAME")!=string::npos)
+	if (label.find("LAME")!=std::string::npos)
 	{
 		if (label.size() < 8)
 			return _T("Lame");
@@ -1567,19 +1570,19 @@ tstring CMp3File::TranslateLabel(tstring label)
 		return ret;
 	}
 
-	if (label.find("VBRI")!=string::npos)
+	if (label.find("VBRI")!=std::string::npos)
 		return _T("FhG (fastenc)");
 
-	if (label.find("MPGE")!=string::npos)
+	if (label.find("MPGE")!=std::string::npos)
 		return _T("Gogo (before 3.0)");
 
-	if (label.find("GOGO")!=string::npos)
+	if (label.find("GOGO")!=std::string::npos)
 		return _T("Gogo (after 3.0)");
 
-	if (label.find("RCA")!=string::npos)
+	if (label.find("RCA")!=std::string::npos)
 		return label;
 
-	if (label.find("Thomson")!=string::npos)
+	if (label.find("Thomson")!=std::string::npos)
 		return label;
 
 	return "";

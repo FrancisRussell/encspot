@@ -1,3 +1,8 @@
+#include <algorithm>
+#include <cstdio>
+#include <vector>
+#include <string>
+#include <utility>
 #include <cstring>
 #include <encspot/StdAfx.h>
 #include <encspot/mp3structs.h>
@@ -10,7 +15,7 @@ int mp3data_string::get_quality(const mp3data &data, BOOL monoquality )
 	tstring enc = encoder;
 	int br		= data.bitrate;
 
-	vector<tstring> good,bad;
+	std::vector<tstring> good,bad;
 	good.push_back(_T("FhG"));
 	good.push_back(_T("Lame 3.8"));
 	good.push_back(_T("Lame 3.9"));
@@ -616,8 +621,8 @@ tstring	mp3data_string::get_report(mp3data data, tstring version)
 	
 	tstring name = path; 
 	int pos = path.rfind(_T('\\'));
-	if (pos!=string::npos)
-		name = path.substr(pos+1,string::npos);
+	if (pos!=std::string::npos)
+		name = path.substr(pos+1,std::string::npos);
 	
 	out+=name + _T("\r\n");
 	out+=tstring(name.size(),_T('-'))+_T("\r\n\r\n");
@@ -648,7 +653,7 @@ tstring	mp3data_string::get_report(mp3data data, tstring version)
 		
 			_stprintf(buff,_T("%i"), brate_value);
 			tstring value = buff;
-			value = tstring(max(3 - value.size(),0),_T(' ')) + value + _T("     ");	 
+			value = tstring(std::max<int>(3 - value.size(),0),_T(' ')) + value + _T("     ");	 
 			out+=value;
 
 			int num_bars = (40 * count)/ max;
@@ -657,7 +662,7 @@ tstring	mp3data_string::get_report(mp3data data, tstring version)
 
 			_stprintf(buff,_T("%.1f%%"),float(count * 100) / data.frameCount);
 			tstring percent = buff;
-			percent = tstring(max(7 - percent.size(),0),_T(' ')) + percent;
+			percent = tstring(std::max<int>(7 - percent.size(),0),_T(' ')) + percent;
 			out+=percent;
 			out+=_T("\r\n");
 		}
@@ -666,19 +671,19 @@ tstring	mp3data_string::get_report(mp3data data, tstring version)
 	out+=tstring(taglength,_T('-'))+_T("\r\n");
 	out+=_T("\r\n");
 
-	pair<tstring,tstring> data_list[11]; 
-	data_list[0] = make_pair<tstring,tstring>(_T("Type"),			type);
-	data_list[1] = make_pair<tstring,tstring>(_T("Bitrate"),		bitrate);
-	data_list[2] = make_pair<tstring,tstring>(_T("Mode"),			mode);
-	data_list[3] = make_pair<tstring,tstring>(_T("Frequency"),		freq + _T(" Hz"));
-	data_list[4] = make_pair<tstring,tstring>(_T("Frames"),			frames);
-	data_list[5] = make_pair<tstring,tstring>(_T("Length"),			length);
-	data_list[6] = make_pair<tstring,tstring>(_T("Max. Reservoir"),	max_reservoir);
-	data_list[6] = make_pair<tstring,tstring>(_T("Av. Reservoir"),	av_reservoir);
-	data_list[7] = make_pair<tstring,tstring>(_T("Emphasis"),		emphasis);
-	data_list[8] = make_pair<tstring,tstring>(_T("Scalefac"),		scalefac);
-	data_list[9] = make_pair<tstring,tstring>(_T("Bad Last Frame"),	bad_last_frame);
-	data_list[10]= make_pair<tstring,tstring>(_T("Encoder"),		encoder);
+	std::pair<tstring,tstring> data_list[11]; 
+	data_list[0] = std::make_pair<tstring,tstring>(_T("Type"),		type);
+	data_list[1] = std::make_pair<tstring,tstring>(_T("Bitrate"),		bitrate);
+	data_list[2] = std::make_pair<tstring,tstring>(_T("Mode"),			mode);
+	data_list[3] = std::make_pair<tstring,tstring>(_T("Frequency"),		freq + _T(" Hz"));
+	data_list[4] = std::make_pair<tstring,tstring>(_T("Frames"),			frames);
+	data_list[5] = std::make_pair<tstring,tstring>(_T("Length"),			length);
+	data_list[6] = std::make_pair<tstring,tstring>(_T("Max. Reservoir"),	max_reservoir);
+	data_list[6] = std::make_pair<tstring,tstring>(_T("Av. Reservoir"),	av_reservoir);
+	data_list[7] = std::make_pair<tstring,tstring>(_T("Emphasis"),		emphasis);
+	data_list[8] = std::make_pair<tstring,tstring>(_T("Scalefac"),		scalefac);
+	data_list[9] = std::make_pair<tstring,tstring>(_T("Bad Last Frame"),	bad_last_frame);
+	data_list[10]= std::make_pair<tstring,tstring>(_T("Encoder"),		encoder);
 
 
 	for (int i = 0;i<11;i++)
@@ -686,7 +691,7 @@ tstring	mp3data_string::get_report(mp3data data, tstring version)
 		tstring name = data_list[i].first;
 		tstring data = data_list[i].second;
 
-		out+=name+tstring(max(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+		out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
 	}
 
 	out+= get_header_report(data);
@@ -706,28 +711,28 @@ tstring mp3data_string::get_header_report(const mp3data &data)
 	{
 		tstring name = _T("Lame Header");
 		tstring data = _T("No");
-		out+=name+tstring(max(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+		out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
 		return out;
 	}
 
 	out+="\r\nLame Header:\r\n\r\n";
 
-	pair<tstring,tstring> data_list[15]; 
-	data_list[0] = make_pair<tstring,tstring>(_T("Quality"),			lame_vbr_scale);
-	data_list[1] = make_pair<tstring,tstring>(_T("Version String"),		encoder);
-	data_list[2] = make_pair<tstring,tstring>(_T("Tag Revision"),		lame_tag_revision);
-	data_list[3] = make_pair<tstring,tstring>(_T("VBR Method"),			lame_vbr_method);
-	data_list[4] = make_pair<tstring,tstring>(_T("Lowpass Filter"),		lame_lowpass);
-	data_list[5] = make_pair<tstring,tstring>(_T("Psycho-acoustic Model"),			lame_nspsytune);
-	data_list[6] = make_pair<tstring,tstring>(_T("Safe Joint Stereo"),		lame_nssafejoint);
-	data_list[7] = make_pair<tstring,tstring>(_T("nogap (continued)"),	lame_nogapcontinued);
-	data_list[8] = make_pair<tstring,tstring>(_T("nogap (continuation)"),lame_nogapcontinuation);
-	data_list[9] = make_pair<tstring,tstring>(_T("ATH Type"),			lame_athtype);
-	data_list[10] = make_pair<tstring,tstring>(_T("ABR Bitrate"),		lame_abr_bitrate);
-	data_list[11] = make_pair<tstring,tstring>(_T("Noise Shaping"),		lame_noise_shaping);
-	data_list[12] = make_pair<tstring,tstring>(_T("Stereo Mode"),		lame_stereo_mode);
-	data_list[13] = make_pair<tstring,tstring>(_T("Unwise Settings Used"),	lame_unwise);
-	data_list[14] = make_pair<tstring,tstring>(_T("Input Frequency"),	lame_input_freq);
+	std::pair<tstring,tstring> data_list[15]; 
+	data_list[0] = std::make_pair<tstring,tstring>(_T("Quality"),			lame_vbr_scale);
+	data_list[1] = std::make_pair<tstring,tstring>(_T("Version String"),		encoder);
+	data_list[2] = std::make_pair<tstring,tstring>(_T("Tag Revision"),		lame_tag_revision);
+	data_list[3] = std::make_pair<tstring,tstring>(_T("VBR Method"),			lame_vbr_method);
+	data_list[4] = std::make_pair<tstring,tstring>(_T("Lowpass Filter"),		lame_lowpass);
+	data_list[5] = std::make_pair<tstring,tstring>(_T("Psycho-acoustic Model"),			lame_nspsytune);
+	data_list[6] = std::make_pair<tstring,tstring>(_T("Safe Joint Stereo"),		lame_nssafejoint);
+	data_list[7] = std::make_pair<tstring,tstring>(_T("nogap (continued)"),	lame_nogapcontinued);
+	data_list[8] = std::make_pair<tstring,tstring>(_T("nogap (continuation)"),lame_nogapcontinuation);
+	data_list[9] = std::make_pair<tstring,tstring>(_T("ATH Type"),			lame_athtype);
+	data_list[10] = std::make_pair<tstring,tstring>(_T("ABR Bitrate"),		lame_abr_bitrate);
+	data_list[11] = std::make_pair<tstring,tstring>(_T("Noise Shaping"),		lame_noise_shaping);
+	data_list[12] = std::make_pair<tstring,tstring>(_T("Stereo Mode"),		lame_stereo_mode);
+	data_list[13] = std::make_pair<tstring,tstring>(_T("Unwise Settings Used"),	lame_unwise);
+	data_list[14] = std::make_pair<tstring,tstring>(_T("Input Frequency"),	lame_input_freq);
 	
 
 	for (int i = 0;i<15;i++)
@@ -736,7 +741,7 @@ tstring mp3data_string::get_header_report(const mp3data &data)
 		tstring data = data_list[i].second;
 
 		int test = name.size();
-		out+=name+tstring(max(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+		out+=name+tstring(std::max<int>(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
 	}
 
 

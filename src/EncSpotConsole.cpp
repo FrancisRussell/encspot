@@ -17,7 +17,7 @@ tstring Trim(tstring arg)
 
 int main(int argc, char* argv[])
 {
-	vector<tstring> list;
+	std::vector<tstring> list;
 	for (int i = 1;i<argc;i++)
 		list.push_back(Trim(argv[i]));
 

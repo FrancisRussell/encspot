@@ -3,6 +3,8 @@
 
 #include <cstring>
 #include <cstdlib>
+#include <string>
+#include <vector>
 #include "Callbacks.h"
 
 class CID3Tag  
@@ -16,7 +18,7 @@ class CID3Tag
 
 	struct CFrame
 	{
-		string buffer;
+		std::string buffer;
 		char id[5];
 
 		BYTE m_flags_high;
@@ -83,7 +85,7 @@ class CID3Tag
 	BOOL m_bExtendedHeader;
 	
 
-	vector<CFrame> m_frames;
+	std::vector<CFrame> m_frames;
 
 public:
 	int size();
@@ -91,9 +93,9 @@ public:
 	BOOL	m_bExists;
 
 	BOOL	CreateNewSpace(int nSpace, iProgCallback *pCallback = NULL);
-	BOOL	GetTextFrame(const string szID, string &data);
-	int		GetFrameNumber(const string id);
-	void	MakeTextFrame(const string szID, const string &data);
+	BOOL	GetTextFrame(const std::string szID, std::string &data);
+	int		GetFrameNumber(const std::string id);
+	void	MakeTextFrame(const std::string szID, const std::string &data);
 	BOOL	RemoveTagFromFile();
 	void	MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, const char *szInfo);
 	int		GetCueFrameNumber(tstring *pString = NULL);

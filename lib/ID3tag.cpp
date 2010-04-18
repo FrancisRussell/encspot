@@ -3,10 +3,10 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <cstring>
+#include <cstdio>
+#include <string>
 #include <encspot/StdAfx.h>
 #include <encspot/ID3tag.h>
-
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -225,8 +225,8 @@ int CID3Tag::GetCueFrameNumber(tstring *pString)
 			*pString = "GEOB";
 	}
 		
-	string contents = m_frames[i].buffer;
-	if (contents.find("CUESHEET")!=string::npos)
+	std::string contents = m_frames[i].buffer;
+	if (contents.find("CUESHEET")!=std::string::npos)
 		return i;
 	else
 		return -1;		
@@ -249,10 +249,10 @@ void CID3Tag::MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, c
 
 	CFrame &frame = m_frames[frame_num];
 
-	string text;
-	text+="CUESHEET\r\n"	+ string(szCuesheet)+ "ENDCUESHEET";
-	text+="CUEVERSION\r\n"	+ string(szVersion)	+ "ENDCUEVERSION";
-	text+="CUEINFO\r\n"		+ string(szInfo)	+ "ENDCUEINFO";
+	std::string text;
+	text+="CUESHEET\r\n"	+ std::string(szCuesheet)+ "ENDCUESHEET";
+	text+="CUEVERSION\r\n"	+ std::string(szVersion)	+ "ENDCUEVERSION";
+	text+="CUEINFO\r\n"		+ std::string(szInfo)	+ "ENDCUEINFO";
 
 	
 	frame.buffer+='\0';  //encoding as ascii
@@ -321,7 +321,7 @@ BOOL CID3Tag::GetCueFrame(tstring &data)
 	return TRUE;
 }
 
-BOOL CID3Tag::GetTextFrame(const string szID, string &data)
+BOOL CID3Tag::GetTextFrame(const std::string szID, std::string &data)
 {
 	int frame_num = GetFrameNumber(szID);
 
@@ -335,7 +335,7 @@ BOOL CID3Tag::GetTextFrame(const string szID, string &data)
 }
 
 
-void CID3Tag::MakeTextFrame(const string szID, const string &data)
+void CID3Tag::MakeTextFrame(const std::string szID, const std::string &data)
 {
 
 	int frame_num = GetFrameNumber(szID);
@@ -356,7 +356,7 @@ void CID3Tag::MakeTextFrame(const string szID, const string &data)
 	frame.buffer+=data;
 }
 
-int CID3Tag::GetFrameNumber(const string id)
+int CID3Tag::GetFrameNumber(const std::string id)
 {
 	for (int i = 0;i<m_frames.size();i++)
 	{
