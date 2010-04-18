@@ -2,10 +2,8 @@
 
 COggFile::COggFile()
 {
-
 }
 
 COggFile::~COggFile()
 {
-
 }

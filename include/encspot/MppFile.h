@@ -4,31 +4,26 @@
 #include "mp3structs.h"
 #include "MediaFile.h"
 
-typedef struct
+struct mpp_info
 {
-	unsigned int StreamVersion;
-	unsigned int Bitrate;
-	unsigned int Frames;
-	unsigned int MS;
-	unsigned int ByteLength;
-	unsigned int Profile;
-	INT64		 Duration;		//in milliseconds
+  unsigned int StreamVersion;
+  unsigned int Bitrate;
+  unsigned int Frames;
+  unsigned int MS;
+  unsigned int ByteLength;
+  unsigned int Profile;
+  INT64     Duration;    //in milliseconds
+};
 
-} mpp_info;
-
-
-
-class CMppFile  : public CMediaFile
+class CMppFile : public CMediaFile
 {
-
-	int ReadFileHeader(mpp_info *Info);
-	
+  int ReadFileHeader(mpp_info *Info);
+  
 public:
-	BOOL Parse(mp3data &data);
+  BOOL Parse(mp3data &data);
 
-	CMppFile();
-	virtual ~CMppFile();
-
+  CMppFile();
+  virtual ~CMppFile();
 };
 
 #endif

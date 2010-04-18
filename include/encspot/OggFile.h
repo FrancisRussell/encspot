@@ -6,9 +6,8 @@
 class COggFile : public CMediaFile 
 {
 public:
-	COggFile();
-	virtual ~COggFile();
-
+  COggFile();
+  virtual ~COggFile();
 };
 
 #endif

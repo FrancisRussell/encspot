@@ -6,23 +6,16 @@
 
 CMediaFileWrapper::CMediaFileWrapper() : pMediaFile(NULL)
 {
-
-
 }
-
-
 
 CMediaFileWrapper::~CMediaFileWrapper()
 {
-
 }
 
 BOOL CMediaFileWrapper::Open(tstring fname)
 {
-	if (CMp3File::IsThisType(fname))
-		pMediaFile = new CMp3File;
+  if (CMp3File::IsThisType(fname))
+    pMediaFile = new CMp3File();
 
-
-	return pMediaFile != NULL;
-
+  return pMediaFile != NULL;
 }

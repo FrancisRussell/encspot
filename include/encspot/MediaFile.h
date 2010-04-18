@@ -6,28 +6,22 @@
 
 class CMediaFile  
 {
-
-
 protected:
-
-	FILE *		m_pFile;
-	tstring		m_tsFname; 
-	int			m_nFilesize;
-
+  FILE *  m_pFile;
+  tstring m_tsFname; 
+  int     m_nFilesize;
 
 public:
+  BOOL    Open(tstring fname, tstring mode = _T("rb"));    
+    
+  void    Close() 
+  {    
+      fclose(m_pFile); 
+      m_pFile = NULL;
+  }
 
-	BOOL	Open(tstring fname, tstring mode = _T("rb"));	
-	
-	void	Close() 
-	{	
-		fclose(m_pFile); 
-		m_pFile = NULL;
-	}
-
-	CMediaFile();
-	virtual ~CMediaFile();
-
+  CMediaFile();
+  virtual ~CMediaFile();
 };
 
 #endif

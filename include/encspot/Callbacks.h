@@ -3,7 +3,7 @@
 
 struct iProgCallback
 {
-	virtual BOOL Report(int nProg) = 0;
+  virtual BOOL Report(int nProg) = 0;
 };
 
 #endif

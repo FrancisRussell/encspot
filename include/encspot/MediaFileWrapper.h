@@ -6,14 +6,13 @@ class CMediaFile;
 class CMediaFileWrapper  
 {
 private: 
-	CMediaFile *pMediaFile;
+  CMediaFile *pMediaFile;
 
 public:
-	BOOL Open(tstring fname);
+  BOOL Open(tstring fname);
 
-	CMediaFileWrapper();
-	virtual ~CMediaFileWrapper();
-
+  CMediaFileWrapper();
+  virtual ~CMediaFileWrapper();
 };
 
 #endif
