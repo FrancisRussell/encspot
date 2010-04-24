@@ -4,7 +4,6 @@
 #include <string>
 
 
-///FIXME: check to see if this actually works under windows
 #ifdef _WIN32
 
 #define NOMINMAX
@@ -37,12 +36,12 @@ typedef unsigned long DWORD;
 #define USES_CONVERSION
 #define A2T(x) x
 
-#define lstrcpyn	strncpy
-#define	_tremove	remove
-#define _trename	rename
-#define	_tfopen		fopen
-#define _sntprintf	snprintf
-#define _tprintf	printf
+#define lstrcpyn        strncpy
+#define _tremove        remove
+#define _trename        rename
+#define _tfopen         fopen
+#define _sntprintf      snprintf
+#define _tprintf        printf
 #define _tmain          main
 
 #endif

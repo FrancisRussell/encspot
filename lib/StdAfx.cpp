@@ -1,6 +1,6 @@
 // stdafx.cpp : source file that includes just the standard includes
-//	EncSpotStaticLib.pch will be the pre-compiled header
-//	stdafx.obj will contain the pre-compiled type information
+// EncSpotStaticLib.pch will be the pre-compiled header
+// stdafx.obj will contain the pre-compiled type information
 
 #include <cstdio>
 #include <encspot/StdAfx.h>

@@ -160,10 +160,10 @@ void mp3data_string::update_id3v1(const mp3data &data)
 
   if (data.bId3v1Tag)
   {
-	USES_CONVERSION;
+    USES_CONVERSION;
     id3v1_track = itot10(data.id3v1_track,A2T(b),2);
 
-    int nGen = data.id3v1tag.genre;
+    const int nGen = data.id3v1tag.genre;
     if (nGen < (sizeof(genre_names)/sizeof(char *)))
       id3v1_genre = A2T(genre_names[nGen]);
     else

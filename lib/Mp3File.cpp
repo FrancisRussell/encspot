@@ -236,7 +236,7 @@ int  CMp3File::SeekLastHeader(BYTE *final10)
   int i;
   for (i = 0;i<5;i++)
   {
-	  int back_pos = std::min(fsize, 65536 * 5);
+    int back_pos = std::min(fsize, 65536 * 5);
     fseek(m_pFile, -back_pos, SEEK_END);
 
     if (SeekNextHeader()!=-1)

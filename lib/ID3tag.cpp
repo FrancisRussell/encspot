@@ -187,10 +187,10 @@ void CID3Tag::WriteInt(BYTE *pBuff, int nVal)
 
 int CID3Tag::GetCueFrameNumber(tstring *pString)
 {
-        int i;
+  int i;
   for (i = 0;i<m_frames.size();i++)
   {
-	const std::string id = m_frames[i].id;
+    const std::string id = m_frames[i].id;
     if (id == "GEOB")
       break;
   }
@@ -264,10 +264,9 @@ BOOL CID3Tag::RemoveTagFromFile()
 
 BOOL CID3Tag::GetCueFrame(tstring &data)
 {
-  int i = GetCueFrameNumber();
+  const int i = GetCueFrameNumber();
   if (i==-1)
     return FALSE;
-
 
   CFrame &frame = m_frames[i];
   if (frame.buffer.size() < 20)
@@ -276,10 +275,10 @@ BOOL CID3Tag::GetCueFrame(tstring &data)
   {
     const char *szBuff = frame.buffer.c_str();
     if (*szBuff == 0 && *(szBuff + 1)==0)
-	{
-	  USES_CONVERSION;
+    {
+      USES_CONVERSION;
       data = A2T(szBuff+4);
-	}
+    }
     else if (*szBuff==0x01)
     {
       MessageBox(GetActiveWindow(), _T("UNICODE not supported in this version."),0,0);
@@ -287,16 +286,16 @@ BOOL CID3Tag::GetCueFrame(tstring &data)
     }
     else if (*szBuff==0x00)//not unicode
     {
-	  USES_CONVERSION;
-	  std::string mime = szBuff + 1;
-	  std::string filename = szBuff + 1 + mime.size()+1;
+      USES_CONVERSION;
+      std::string mime = szBuff + 1;
+      std::string filename = szBuff + 1 + mime.size()+1;
       data = A2T(szBuff + 1 + mime.size() + 1 + filename.size() + 1 + 1);
     }
     else //non conforming early version.
-	{
-	  USES_CONVERSION;
+    {
+      USES_CONVERSION;
       data = A2T(szBuff);
-	}
+    }
   }  
 
   return TRUE;
