@@ -37,11 +37,11 @@ int _tmain(int argc, TCHAR* argv[])
       data.quality = data_string.update(data,FALSE);
 
       tstring out_string = data_string.get_report(data,_T("EncSpot Console 2.0"));
-      printf((out_string + _T("\n\n\n\n")).c_str());
+      _tprintf((out_string + _T("\n\n\n\n")).c_str());
     }
     else
     {
-      printf(_T("File not found : \n\n%s\n\n\n\n"), item.c_str());
+      _tprintf(_T("File not found : \n\n%s\n\n\n\n"), item.c_str());
     }
   }
 

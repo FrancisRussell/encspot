@@ -16,7 +16,7 @@ BOOL CMediaFile::Open(tstring fname, tstring mode)
   m_tsFname = fname;
 
   //open for reading only
-  m_pFile = fopen(fname.c_str(),mode.c_str());
+  m_pFile = _tfopen(fname.c_str(),mode.c_str());
 
   if (m_pFile)
   {

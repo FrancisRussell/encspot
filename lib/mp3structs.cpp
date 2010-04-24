@@ -160,12 +160,12 @@ void mp3data_string::update_id3v1(const mp3data &data)
 
   if (data.bId3v1Tag)
   {
-  
-    id3v1_track = itot10(data.id3v1_track,b,2);
+	USES_CONVERSION;
+    id3v1_track = itot10(data.id3v1_track,A2T(b),2);
 
     int nGen = data.id3v1tag.genre;
     if (nGen < (sizeof(genre_names)/sizeof(char *)))
-      id3v1_genre = genre_names[nGen];
+      id3v1_genre = A2T(genre_names[nGen]);
     else
       id3v1_genre = _T("Unknown");
   }
@@ -181,7 +181,8 @@ tstring mp3data_string::id3trim(const char *szStr, int nLen)
     return _T("");
   else
   {
-    tstring first = tstring(szStr, pos+1);  
+    USES_CONVERSION;
+    tstring first = tstring(A2T(szStr), pos+1);  
     //return inital substring...
     return first.c_str();
   }
@@ -675,7 +676,7 @@ tstring mp3data_string::get_header_report(const mp3data &data)
     return out;
   }
 
-  out+="\r\nLame Header:\r\n\r\n";
+  out+=_T("\r\nLame Header:\r\n\r\n");
 
   std::pair<tstring,tstring> data_list[15]; 
   data_list[0] = std::make_pair<tstring,tstring>(_T("Quality"),      lame_vbr_scale);

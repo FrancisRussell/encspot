@@ -69,7 +69,7 @@ private:
     }
   };
 
-  friend class CFrame;
+  friend struct CFrame;
 
   tstring m_sFname;
   BYTE    m_nVersionMajor;

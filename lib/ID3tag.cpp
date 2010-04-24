@@ -30,10 +30,10 @@ BOOL CID3Tag::Load(const TCHAR *szFname)
   m_frames.clear();
   m_nSize = 0;
 
-  if (m_sFname=="")
+  if (m_sFname==_T(""))
     return FALSE;
 
-  FILE *pFile = fopen(m_sFname.c_str(), "rb");
+  FILE *pFile = _tfopen(m_sFname.c_str(), _T("rb"));
   if (pFile==NULL)
     return FALSE;
 
@@ -128,7 +128,7 @@ BOOL CID3Tag::Save()
 
   memset(pBuffPtr, 0, (pBuff + total_size - pBuffPtr));
 
-  FILE *pFile = fopen(m_sFname.c_str(), "r+b");
+  FILE *pFile = _tfopen(m_sFname.c_str(), _T("r+b"));
   if (pFile==NULL)
   {
     delete[] pBuff;
@@ -190,7 +190,7 @@ int CID3Tag::GetCueFrameNumber(tstring *pString)
         int i;
   for (i = 0;i<m_frames.size();i++)
   {
-    tstring id = m_frames[i].id;
+	const std::string id = m_frames[i].id;
     if (id == "GEOB")
       break;
   }
@@ -201,10 +201,10 @@ int CID3Tag::GetCueFrameNumber(tstring *pString)
   else
   {
     if (pString)
-      *pString = "GEOB";
+      *pString = _T("GEOB");
   }
     
-  std::string contents = m_frames[i].buffer;
+  const std::string contents = m_frames[i].buffer;
   if (contents.find("CUESHEET")!=std::string::npos)
     return i;
   else
@@ -248,7 +248,7 @@ BOOL CID3Tag::RemoveTagFromFile()
   if (m_nSize==0)
     return FALSE;
 
-  FILE *pFile = fopen(m_sFname.c_str(), "r+b");
+  FILE *pFile = _tfopen(m_sFname.c_str(), _T("r+b"));
   if (pFile==NULL)
     return FALSE;  
 
@@ -271,25 +271,32 @@ BOOL CID3Tag::GetCueFrame(tstring &data)
 
   CFrame &frame = m_frames[i];
   if (frame.buffer.size() < 20)
-    data = "";
+    data = _T("");
   else 
   {
-    const TCHAR *szBuff = frame.buffer.c_str();
+    const char *szBuff = frame.buffer.c_str();
     if (*szBuff == 0 && *(szBuff + 1)==0)
-      data = frame.buffer.c_str()+4;
+	{
+	  USES_CONVERSION;
+      data = A2T(szBuff+4);
+	}
     else if (*szBuff==0x01)
     {
-      MessageBox(GetActiveWindow(), "UNICODE not supported in this version.",0,0);
+      MessageBox(GetActiveWindow(), _T("UNICODE not supported in this version."),0,0);
       return FALSE;
     }
     else if (*szBuff==0x00)//not unicode
     {
-      tstring mime = szBuff + 1;
-      tstring filename = szBuff + 1 + mime.size()+1;
-      data = szBuff + 1 + mime.size() + 1 + filename.size() + 1 + 1;
+	  USES_CONVERSION;
+	  std::string mime = szBuff + 1;
+	  std::string filename = szBuff + 1 + mime.size()+1;
+      data = A2T(szBuff + 1 + mime.size() + 1 + filename.size() + 1 + 1);
     }
     else //non conforming early version.
-      data = szBuff;
+	{
+	  USES_CONVERSION;
+      data = A2T(szBuff);
+	}
   }  
 
   return TRUE;
@@ -349,7 +356,7 @@ BOOL CID3Tag::CreateNewSpace(int nSpace, iProgCallback *pCallback)
   pTfile = _tfopen(tpath.c_str(), _T("wb"));
   if (pTfile == NULL) 
   {
-    MessageBox(GetActiveWindow(), "Unable to open temp file for writing",NULL,NULL);
+    MessageBox(GetActiveWindow(), _T("Unable to open temp file for writing"),NULL,NULL);
     return FALSE;
    
   }
@@ -361,10 +368,10 @@ BOOL CID3Tag::CreateNewSpace(int nSpace, iProgCallback *pCallback)
   //1MB at a time
   const int nBlockSize = 1000000;
   BYTE data[nBlockSize];
-  FILE *pOld = _tfopen(m_sFname.c_str(),"rb");
+  FILE *pOld = _tfopen(m_sFname.c_str(), _T("rb"));
   if (pOld == NULL)
   {
-    MessageBox(GetActiveWindow(),"Unable to open file for reading",NULL,NULL);
+    MessageBox(GetActiveWindow(), _T("Unable to open file for reading") ,NULL,NULL);
     return FALSE;
   }
 

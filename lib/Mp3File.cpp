@@ -236,7 +236,7 @@ int  CMp3File::SeekLastHeader(BYTE *final10)
   int i;
   for (i = 0;i<5;i++)
   {
-    int back_pos = std::min(fsize, 65536 * 5);
+	  int back_pos = std::min(fsize, 65536 * 5);
     fseek(m_pFile, -back_pos, SEEK_END);
 
     if (SeekNextHeader()!=-1)
@@ -316,7 +316,7 @@ BOOL CMp3File::Trim(INT64 nStart, INT64 nStop,const mp3data &data, const std::ve
     temp_name = newpath;
   
   
-  FILE *pNewFile = fopen(temp_name.c_str(), _T("wb"));
+  FILE *pNewFile = _tfopen(temp_name.c_str(), _T("wb"));
   if (pNewFile==NULL)
     return FALSE;
 
@@ -480,7 +480,7 @@ BOOL CMp3File::ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data, cons
     temp_name = newpath;
   
   
-  FILE *pNewFile = fopen(temp_name.c_str(), _T("wb"));
+  FILE *pNewFile = _tfopen(temp_name.c_str(), _T("wb"));
   if (pNewFile==NULL)
     return FALSE;
 
@@ -1244,8 +1244,11 @@ tstring CMp3File::GetLabels(const XHEADDATA &xing)
   char buff[1024]; 
 
   if (xing.encoder[0]!=0)
-    return TranslateLabel(xing.encoder);
-  
+  {
+    USES_CONVERSION;
+    return TranslateLabel(A2T(xing.encoder));
+  }
+
   fseek(m_pFile, 0, SEEK_SET);
   mp3data dummy;
   GetID3v2(dummy);
@@ -1283,7 +1286,7 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, int len)
   {
     const std::string version(b.substr(pos+4,4));
     const std::string tst(b.substr(pos+8,3));
-    char tag = ' ';
+    TCHAR tag = _T(' ');
     if ((tst.size()>=3) && (tst[0]==' ') && (tst[1]=='('))
       tag = tst[2];
 
@@ -1436,7 +1439,7 @@ bool CMp3File::IsMp3File(tstring fname)
 {
   MYASSERT(m_pFile==NULL);
 
-  m_pFile = fopen(fname.c_str(),_T("rb"));
+  m_pFile = _tfopen(fname.c_str(),_T("rb"));
 
   if (!m_pFile)
     return FALSE;
@@ -1454,30 +1457,30 @@ bool CMp3File::IsMp3File(tstring fname)
 tstring CMp3File::TranslateLabel(tstring label)
 {
 
-  if (label.find("LAME")!=std::string::npos)
+  if (label.find(_T("LAME"))!=std::string::npos)
   {
     if (label.size() < 8)
       return _T("Lame");
 
     tstring version = label.substr(4, 4);
     tstring ret = _T("Lame ") + version;
-    char tag = label[8];
+    TCHAR tag = label[8];
     if (tag==0)
       return ret;
     
-    if (tag=='a')
+    if (tag==_T('a'))
       ret+=_T(" (alpha)");
-    else if (tag=='b')
+    else if (tag==_T('b'))
       ret+=_T(" (beta)");
 
     if (label.size() >= 11)
     {
-      if (label[8]==' ' && label[9]=='(')
+      if (label[8]==_T(' ') && label[9]==_T('('))
       {
-        char tag = label[10];
-        if (tag=='a')
+        TCHAR tag = label[10];
+        if (tag==_T('a'))
           ret+=_T(" (alpha)");
-        else if (tag=='b')
+        else if (tag==_T('b'))
           ret+=_T(" (beta)");
       }
 
@@ -1486,22 +1489,22 @@ tstring CMp3File::TranslateLabel(tstring label)
     return ret;
   }
 
-  if (label.find("VBRI")!=std::string::npos)
+  if (label.find(_T("VBRI"))!=std::string::npos)
     return _T("FhG (fastenc)");
 
-  if (label.find("MPGE")!=std::string::npos)
+  if (label.find(_T("MPGE"))!=std::string::npos)
     return _T("Gogo (before 3.0)");
 
-  if (label.find("GOGO")!=std::string::npos)
+  if (label.find(_T("GOGO"))!=std::string::npos)
     return _T("Gogo (after 3.0)");
 
-  if (label.find("RCA")!=std::string::npos)
+  if (label.find(_T("RCA"))!=std::string::npos)
     return label;
 
-  if (label.find("Thomson")!=std::string::npos)
+  if (label.find(_T("Thomson"))!=std::string::npos)
     return label;
 
-  return "";
+  return _T("");
 }
 
 
@@ -1919,13 +1922,13 @@ BOOL CMp3File::AppendMP3(mp3data datain1, tstring path2, tstring pathout, BOOL b
 
   if (bit1!=bit2)
   {
-    TCHAR mesg[] = _T(  "These two files have different bitrates. The resulting file will therefore\n"
-              "be a VBR file. It should play correctly, but it's length may be displayed\n "
-              "incorrectly by some players.");
+    TCHAR mesg[] = _T(  "These two files have different bitrates. The resulting file will therefore\n")
+              _T("be a VBR file. It should play correctly, but it's length may be displayed\n ")
+              _T("incorrectly by some players.");
     MessageBox(GetActiveWindow(), mesg,_T("FYI"),MB_ICONINFORMATION);
   }
 
-  FILE *pNewFile = fopen(pathout.c_str(), _T("wb"));
+  FILE *pNewFile = _tfopen(pathout.c_str(), _T("wb"));
   int total1 = m_nFilesize;
   if (datain1.bId3v1Tag)
     total1-=128;
@@ -1948,7 +1951,7 @@ BOOL CMp3File::AppendMP3(mp3data datain1, tstring path2, tstring pathout, BOOL b
 
   //second file
 
-  FILE *pSecond = fopen(path2.c_str(), _T("rb"));
+  FILE *pSecond = _tfopen(path2.c_str(), _T("rb"));
 
   int todo = mp3Second.m_nFilesize;
   todo-=data2.first_frame_pos;

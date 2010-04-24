@@ -7,7 +7,7 @@
 
 TCHAR* itot10(const int value, TCHAR* const string, const std::size_t size)
 {
-  _sntprintf(string, size, "%d", value);
+  _sntprintf(string, size, _T("%d"), value);
   return string;
 }
 

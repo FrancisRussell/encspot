@@ -2,18 +2,20 @@
 #define ENCSPOT_STDAFX_H
 
 #include <string>
-#include <stdint.h>
 
 
 ///FIXME: check to see if this actually works under windows
-#ifdef __WIN32__
+#ifdef _WIN32
 
+#define NOMINMAX
 #define UNICODE
 #define _UNICODE
 #include <windows.h>
 #include <tchar.h>
+#include <atlconv.h>
 
 #else
+#include <stdint.h>
 
 typedef unsigned short WORD;
 typedef char TCHAR;
