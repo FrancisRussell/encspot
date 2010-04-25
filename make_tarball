@@ -1,12 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 VERSION=$(head -n1 debian/changelog | sed -r "s/.*\((.*)\).*/\1/") 
+PACKAGE_NAME="encspot-${VERSION}"
+TARBALL_NAME="${PACKAGE_NAME}.tar.bz2"
 CURRENT_REVISION=$(mtn au get_current_revision | grep '^old_revision' | sed -r 's/old_revision \[(.*)\].*/\1/')
 TEMP_DIR=$(mktemp -d)
-SOURCE_DIR="${TEMP_DIR}/encspot-${VERSION}"
+SOURCE_DIR="${TEMP_DIR}/${PACKAGE_NAME}"
 mtn co -r ${CURRENT_REVISION} ${SOURCE_DIR}
-rm ${SOURCE_DIR}/make_tarball
+rm -rf ${SOURCE_DIR}/{_MTN,make_tarball}
 mtn log > ${SOURCE_DIR}/CHANGELOG
-tar -jcf "encspot-${VERSION}.tar.bz2" "${SOURCE_DIR}"
+pushd ${TEMP_DIR}
+tar -jcf "${TARBALL_NAME}" "${PACKAGE_NAME}"
+popd
+mv "${TEMP_DIR}/${TARBALL_NAME}" .
 rm -rf ${TEMP_DIR}
+gpg --sign ${TARBALL_NAME}
