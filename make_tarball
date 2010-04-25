@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+VERSION=$(head -n1 debian/changelog | sed -r "s/.*\((.*)\).*/\1/") 
+CURRENT_REVISION=$(mtn au get_current_revision | grep '^old_revision' | sed -r 's/old_revision \[(.*)\].*/\1/')
+TEMP_DIR=$(mktemp -d)
+SOURCE_DIR="${TEMP_DIR}/encspot-${VERSION}"
+mtn co -r ${CURRENT_REVISION} ${SOURCE_DIR}
+rm ${SOURCE_DIR}/make_tarball
+mtn log > ${SOURCE_DIR}/CHANGELOG
+tar -jcf "encspot-${VERSION}.tar.bz2" "${SOURCE_DIR}"
+rm -rf ${TEMP_DIR}

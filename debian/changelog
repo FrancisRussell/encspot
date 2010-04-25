@@ -1,4 +1,12 @@
-encspot (2.01-1) unstable; urgency=low
+encspot (2.01+mtn20100425) unstable; urgency=low
+
+  * Build fixes for both *nix and Windows.
+  * Code reformatting and cleanup.
+  * Multiple fixes for unsafe string handling.
+
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Sun, 25 Apr 2010 22:31:34 +0100
+
+encspot (2.01) unstable; urgency=low
 
   * Initial packaging.
 
