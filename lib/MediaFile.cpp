@@ -1,7 +1,8 @@
+#include <cstdio>
 #include <encspot/StdAfx.h>
 #include <encspot/MediaFile.h>
 
-CMediaFile::CMediaFile() : m_pFile(NULL),m_nFilesize(0)
+CMediaFile::CMediaFile() : m_pFile(NULL), m_nFilesize(0)
 {
 }
 
@@ -11,7 +12,7 @@ CMediaFile::~CMediaFile()
     fclose(m_pFile);
 }
 
-BOOL CMediaFile::Open(tstring fname, tstring mode)
+BOOL CMediaFile::Open(const tstring &fname, const tstring &mode)
 {
   m_tsFname = fname;
 
@@ -26,4 +27,10 @@ BOOL CMediaFile::Open(tstring fname, tstring mode)
   }
   
   return (m_pFile!=NULL);
+}
+
+void CMediaFile::Close()
+{
+  fclose(m_pFile);
+  m_pFile = NULL;
 }

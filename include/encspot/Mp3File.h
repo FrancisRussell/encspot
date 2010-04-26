@@ -47,7 +47,7 @@ private:
   int m_lastBits;
 
 public:    
-  static bool IsThisType(tstring fname)
+  static bool IsThisType(const tstring &fname)
   {
     CMp3File afile;
     return(afile.IsMp3File(fname));
@@ -65,59 +65,59 @@ public:
     virtual BOOL Fire(INT64 nCurr, INT64 nTotal) const = 0;
   };
 
-
-  BOOL Open(tstring fname, tstring mode = _T("rb"))
+  BOOL Open(const tstring &fname, const tstring &mode = _T("rb"))
   {
     m_tag.Load(fname.c_str());
     return CMediaFile::Open(fname, mode);    
   }
 
-    
   CID3Tag    m_tag;
   
-  int        GetFilesize() { return m_nFilesize;    }
-  float    GetAverageBitrate(const mp3data &data);
+  int     GetFilesize() { return m_nFilesize; }
+  float   GetAverageBitrate(const mp3data &data);
   BOOL    ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit,info_lists *pInfoLists,BOOL bDisableCache,CMp3File::sink *pHelp = NULL);
-  BOOL    Trim(INT64 nStart, INT64 nStop,const mp3data &data,const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
-  BOOL    ExtractRegion(INT64 nStart, INT64 nStop,const mp3data &data,const std::vector<int> &byte_locations,tstring newpath,BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
-  BOOL    AppendMP3(mp3data datain1, tstring path2, tstring pathout, BOOL bID1, BOOL bID2, CMp3File::sink_mini *pHelp);
+  BOOL    Trim(INT64 nStart, INT64 nStop, const mp3data &data, const std::vector<int> &byte_locations, 
+            const tstring &newpath, BOOL bNewXing,BOOL bID3, CMp3File::sink_mini *pSink = NULL);
+  BOOL    ExtractRegion(INT64 nStart, INT64 nStop, const mp3data &data, const std::vector<int> &byte_locations,
+            const tstring& newpath, BOOL bNewXing, BOOL bID3, CMp3File::sink_mini *pSink = NULL);
+  BOOL    AppendMP3(mp3data datain1, const tstring &path2, const tstring &pathout, BOOL bID1, BOOL bID2, CMp3File::sink_mini *pHelp);
   CMp3File();
   virtual ~CMp3File();
     
-  tstring TranslateLabel(tstring label);
-  int    GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp=NULL);
+  tstring TranslateLabel(const tstring &label);
+  int     GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp=NULL);
 
 private:
   bool    IsMp3File(tstring fname);
 
   BOOL    FullProcessFrames(mp3data &data_out, int nFrameLimit,info_lists *pInfoLists,BOOL bDisableCache, int id3v1pos, int initpos,CMp3File::sink *pHelp = NULL);
     
-  void    CreateI2(BYTE *buf, int nValue);
-  void    CreateI4(BYTE *buf, int nValue);
+  void    CreateI2(BYTE *buf, int nValue) const;
+  void    CreateI4(BYTE *buf, int nValue) const;
   BOOL    copy_file_data(FILE *new_file, FILE *old_file, int nStart, int nSize = -1, CMp3File::sink_mini *pSink = NULL);
   BOOL    DetectVBR(mp3data &data_out);
   BOOL    ReportProgress(mp3data &data, const sink *pHelp);
-  int        UpdateInfoFromHeader(mp3data &out_data, const mp3header &hHeader);
+  int     UpdateInfoFromHeader(mp3data &out_data, const mp3header &hHeader);
 
-  int        SeekNextHeader(int safety_max = 5);
-  int        SeekLastHeader(BYTE *final10 = NULL);
+  int     SeekNextHeader(int safety_max = 5);
+  int     SeekLastHeader(BYTE *final10 = NULL);
     
   BOOL    GetVBRIHeader(mp3data &data, unsigned char *buf);
-  int        GetXingHeader(mp3data &data, unsigned char *buf);
+  int     GetXingHeader(mp3data &data, unsigned char *buf);
     
     
-  int            GuessFrameLength();
-  int        ProcessNextFrame(mp3data &data_out,info_lists *pInfoLists);
-  tstring        GetLabelsFromBuffer(const char *buff, int len);
-  tstring        ReportOutOfSyncError(mp3data &main_data, const mp3header &hHeader);
-  BOOL        CheckDone(mp3data &data, int pos);
-  void        SetBaseInfo(mp3data &data, const mp3header &header);
+  int     GuessFrameLength();
+  int     ProcessNextFrame(mp3data &data_out,info_lists *pInfoLists);
+  tstring GetLabelsFromBuffer(const char *buff, int len);
+  tstring ReportOutOfSyncError(mp3data &main_data, const mp3header &hHeader);
+  BOOL    CheckDone(mp3data &data, int pos);
+  void    SetBaseInfo(mp3data &data, const mp3header &header);
 
     
   tstring GetLabels(const XHEADDATA &xing);
 
   int ReadInt();
-  int ReadInt(BYTE *pBuffer);
+  static int ReadInt(const BYTE *pBuffer);
 
   //used to be head_check2
   int MakeHeader(unsigned long head, mp3header &mhHead);

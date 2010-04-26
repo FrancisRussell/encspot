@@ -12,14 +12,8 @@ protected:
   int     m_nFilesize;
 
 public:
-  BOOL    Open(tstring fname, tstring mode = _T("rb"));    
-    
-  void    Close() 
-  {    
-      fclose(m_pFile); 
-      m_pFile = NULL;
-  }
-
+  BOOL    Open(const tstring &fname, const tstring &mode = _T("rb"));    
+  void    Close();
   CMediaFile();
   virtual ~CMediaFile();
 };
