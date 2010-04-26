@@ -1,3 +1,10 @@
+encspot (2.01+mtn20100426) unstable; urgency=low
+
+  * Many fixes for const-correctness.
+  * Avoid allocating giant buffers on the stack.
+
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 26 Apr 2010 04:50:34 +0100
+
 encspot (2.01+mtn20100425) unstable; urgency=low
 
   * Build fixes for both *nix and Windows.
