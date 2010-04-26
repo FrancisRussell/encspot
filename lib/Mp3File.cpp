@@ -1185,22 +1185,22 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, const int len)
 
   tstring label;
 
-  if ( (pos!=std::string::npos) && (pos < (b.size() - 11)))
+  if ( (pos!=std::string::npos) && (b.size() - pos >= 11))
   {
-    const std::string version(b.substr(pos+4,4));
-    const std::string tst(b.substr(pos+8,3));
+    const std::string version(b.substr(pos+4, 4));
+    const std::string tst(b.substr(pos+8, 3));
     TCHAR tag = _T(' ');
     if ((tst.size()>=3) && (tst[0]==' ') && (tst[1]=='('))
       tag = tst[2];
 
     label = _T("LAME")+ tstring(A2T(version.c_str()))+tag;
   }
-  else if ( (pos_pro!=std::string::npos) && (pos_pro < (b.size() - 23)))
+  else if ( (pos_pro!=std::string::npos) && (b.size() - pos_pro >= 23))
   {
-    const std::string version(b.substr(pos_pro+protag.size(),5));
+    const std::string version(b.substr(pos_pro+protag.size(), 5));
     label = _T("RCA ")+ tstring(A2T(version.c_str()));
   }
-  else if ( (pos_pro2!=std::string::npos) && (pos_pro2 < (b.size() - 29)))
+  else if ( (pos_pro2!=std::string::npos) && (b.size() - pos_pro2 >= 29))
   {
     const std::string version(b.substr(pos_pro2+protag2.size(), 6));
     label = _T("Thomson ")+ tstring(A2T(version.c_str()));
