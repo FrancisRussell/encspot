@@ -183,11 +183,10 @@ int CMp3File::SeekNextHeader(const int safety_max)
   int pos = ftell(m_pFile);
   mp3header mhHead;
 
-  BYTE buffer[1000*1024];    //1MB buffer
-  int read = fread(buffer,1,sizeof(buffer),m_pFile);
+  std::vector<BYTE> buffer(1000*1024);    //1MB buffer
+  const int read = fread(&buffer[0], 1, buffer.size(), m_pFile);
 
-
-  for(int i=0;i<read/2;i++)
+  for(int i=0; i<read/2; ++i)
   {
     int framesize_guess = 1;
     int safety;
@@ -195,7 +194,7 @@ int CMp3File::SeekNextHeader(const int safety_max)
 
     for (safety = 0; (safety < safety_max) && framesize_guess; ++safety)
     {
-      const int head = ReadInt(buffer + j);      
+      const int head = ReadInt(&buffer[j]);      
       framesize_guess = MakeHeader(head, mhHead);
 
       j+=framesize_guess;
