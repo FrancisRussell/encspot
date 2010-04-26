@@ -1185,7 +1185,7 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, const int len)
 
   tstring label;
 
-  if ( (pos!=std::string::npos) && (pos < (sizeof(buff) - 11)))
+  if ( (pos!=std::string::npos) && (pos < (b.size() - 11)))
   {
     const std::string version(b.substr(pos+4,4));
     const std::string tst(b.substr(pos+8,3));
@@ -1195,14 +1195,14 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, const int len)
 
     label = _T("LAME")+ tstring(A2T(version.c_str()))+tag;
   }
-  else if ( (pos_pro!=std::string::npos) && (pos_pro < (sizeof(buff) - 8)))
+  else if ( (pos_pro!=std::string::npos) && (pos_pro < (b.size() - 23)))
   {
     const std::string version(b.substr(pos_pro+protag.size(),5));
     label = _T("RCA ")+ tstring(A2T(version.c_str()));
   }
-  else if ( (pos_pro2!=std::string::npos) && (pos_pro2 < (sizeof(buff) - 29)))
+  else if ( (pos_pro2!=std::string::npos) && (pos_pro2 < (b.size() - 29)))
   {
-    const std::string version(b.substr(pos_pro2+protag2.size(),6));
+    const std::string version(b.substr(pos_pro2+protag2.size(), 6));
     label = _T("Thomson ")+ tstring(A2T(version.c_str()));
   }
   else if (b.find("VBRI")!=std::string::npos)
