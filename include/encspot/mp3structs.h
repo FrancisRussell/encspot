@@ -315,7 +315,7 @@ public:
 
   mp3data_string(){}
   int    update(const mp3data &data, BOOL monoquality);
-  tstring  get_report(mp3data data, tstring version = _T(""));
+  tstring  get_report(const mp3data &data, const tstring &version = _T(""));
 
 private:
   void  update_lame(const mp3data &data);

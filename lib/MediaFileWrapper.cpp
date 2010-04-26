@@ -12,7 +12,7 @@ CMediaFileWrapper::~CMediaFileWrapper()
 {
 }
 
-BOOL CMediaFileWrapper::Open(tstring fname)
+BOOL CMediaFileWrapper::Open(const tstring& fname)
 {
   if (CMp3File::IsThisType(fname))
     pMediaFile = new CMp3File();

@@ -9,7 +9,7 @@ private:
   CMediaFile *pMediaFile;
 
 public:
-  BOOL Open(tstring fname);
+  BOOL Open(const tstring& fname);
 
   CMediaFileWrapper();
   virtual ~CMediaFileWrapper();
