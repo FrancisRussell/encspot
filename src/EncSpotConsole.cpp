@@ -3,40 +3,40 @@
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
-static tstring Trim(tstring arg)
+// Is this really needed, even under Windows?
+static tstring trim(const tstring& arg)
 {
-  if (arg[0]==_T('\"'))
-    arg.erase(arg.begin());
-
-  if (arg[arg.size()-1]==_T('\"'))
-    arg.erase(arg.end()-1);
-
-  return arg;
+  if (arg.size()>=2 && arg[0]==_T('\"') && arg[arg.size()-1]==_T('\"'))
+  {
+    return tstring(arg.begin()+1, arg.end()-1);
+  }
+  else
+  {
+    return arg;
+  }
 }
-
 
 int _tmain(int argc, TCHAR* argv[])
 {
   std::vector<tstring> list;
-  for (int i = 1;i<argc;i++)
-    list.push_back(Trim(argv[i]));
+  for (int i=1; i<argc; ++i)
+    list.push_back(trim(argv[i]));
 
-  for (int i = 0;i<list.size();i++)
+  for (unsigned i=0; i<list.size(); ++i)
   {
-    tstring item = list[i];
+    const tstring item = list[i];
     CMp3File mp3;
+
     if (mp3.Open(item))
     {
-    
       mp3data data;
       memset(&data,0,sizeof(data));
       mp3data_string data_string;
       data_string.path = item;
 
       mp3.ProcessFrames(TRUE, data, -1, NULL, TRUE /*DisableCache*/, NULL);
-      data.quality = data_string.update(data,FALSE);
-
-      tstring out_string = data_string.get_report(data,_T("EncSpot Console 2.0"));
+      data.quality = data_string.update(data, FALSE);
+      const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
       _tprintf((out_string + _T("\n\n\n\n")).c_str());
     }
     else
@@ -47,4 +47,3 @@ int _tmain(int argc, TCHAR* argv[])
 
   return 0;
 }
-
