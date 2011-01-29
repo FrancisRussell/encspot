@@ -616,7 +616,7 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
 
   //locate first header
   if (SeekNextHeader()==-1)
-    throw std::runtime_error("Cannot find valid mp3 header, scanning failed.");
+    throw std::runtime_error("Cannot find valid mp3 header.");
 
   const int pos = ftell(m_pFile);
 

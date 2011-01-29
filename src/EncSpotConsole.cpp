@@ -45,13 +45,14 @@ int _tmain(int argc, TCHAR* argv[])
       }
       catch (const std::exception& e)
       {
-        USES_CONVERSION;
-        _tprintf(A2T("An exception was thrown: %s\n"), e.what());
+        _tprintf(_T("An error occured during scanning...\n"));
+        _tprintf(_T("File: %s\n"), item.c_str());
+        _tprintf(_T("Description: %s\n\n"), e.what());
       }
     }
     else
     {
-      _tprintf(_T("File not found : \n\n%s\n\n\n\n"), item.c_str());
+      _tprintf(_T("File not found: %s\n\n"), item.c_str());
     }
   }
 
