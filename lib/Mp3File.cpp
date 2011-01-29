@@ -730,13 +730,6 @@ bool CMp3File::FullProcessFrames(mp3data &data_out, const int nFrameLimit,info_l
   if (nFrameLimit == -1 || data_out.frameCount < nFrameLimit)
     data_out.all_read = true;
 
- 
-  #ifdef XXX
-    //try to add to cache
-    if (g_pCache)    
-      g_pCache->AddItem(data_out);
-  #endif
-
   if (!ReportProgress(data_out, pHelp))
     return true;
 
