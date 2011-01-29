@@ -585,7 +585,7 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
   MYASSERT(m_pFile);
 
   //Prelims...
-  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
+  data_out.path = m_tsFname.c_str();
 
   //cache stuff
 #ifdef XXX
@@ -637,9 +637,9 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
 
   const tstring label = GetLabels(data_out.xing_header);
   if (!label.empty())
-    lstrcpyn(data_out.label,label.c_str(), sizeof(data_out.label)/sizeof(data_out.label[0]));
+    data_out.label = label;
   else
-    data_out.label[0] = 0;
+    data_out.label = _T("");
 
   fseek(m_pFile, nCurrentPos, SEEK_SET);
 

@@ -18,7 +18,7 @@ BOOL CWavFile::ProcessFrames(BOOL bFull, mp3data &data_out, int nFrameLimit)
   MYASSERT(m_pFile);
 
   //Prelims...
-  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
+  data_out.path = m_tsFname.c_str();
   
 
   //read data.
