@@ -151,7 +151,7 @@ void mp3data_string::update_id3v1(const mp3data &data)
   {
     id3v1_track = itoa10(data.id3v1_track);
 
-    const int nGen = data.id3v1tag.genre;
+    const unsigned nGen = data.id3v1tag.genre;
     if (nGen < (sizeof(genre_names)/sizeof(char *)))
       id3v1_genre = A2T(genre_names[nGen]);
     else
@@ -208,12 +208,7 @@ int mp3data_string::update_mpp(const mp3data &data, const BOOL monoquality)
 
 void mp3data_string::update_lame(const mp3data &data)
 {
-
   XHEADDATA xing = data.xing_header;
-  const int nQuality  = 100 - xing.vbr_scale;
-  const int nV      = nQuality / 10;
-  const int nQ      = nQuality % 10;
-
   const tstring vbr_methods[6] = {_T("Unknown"), _T("cbr"), _T("abr"), _T("vbr-old / vbr-rh"), _T("vbr-mtrh"), _T("vbr-new / vbr-mt") };
   const tstring modes[] = {_T("Mono"), _T("Stereo"), _T("Dual Stereo"), _T("Joint Stereo"), _T("Auto"), _T("Intensity"), _T("Unknown") };
   const tstring infreqs[]={_T("32kHz or less"), _T("44.1kHz"), _T("48kHz"), _T("more than 48kHz") };
@@ -395,8 +390,6 @@ tstring mp3data_string::get_mode(const int mode)
 
 tstring mp3data_string::guessenc(const mp3data &data)
 {
-  const BOOL fullguess = data.all_read;
-  
   const tstring label = data.label;
   tstring guess = _T("Unknown");
 
@@ -660,8 +653,6 @@ tstring mp3data_string::get_header_report(const mp3data &data)
   {
     const tstring name = data_list[i].first;
     const tstring data = data_list[i].second;
-    const int test = name.size();
-
     out+=name+tstring(std::max<int>(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
   }
 

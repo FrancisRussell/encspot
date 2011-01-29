@@ -57,8 +57,6 @@ unsigned int crc16tab[256] =
 };
 
 
-static int reverse_int(BYTE b[]);
-
 static inline int CRC_update_lookup(const int value, const int initial_crc)
 {
   int crc = initial_crc;
@@ -345,7 +343,7 @@ BOOL CMp3File::Trim(const INT64 nStart, const INT64 nStop, const mp3data &data,
       fread(pb,1,nFramesize,m_pFile);
       const std::string buffer(reinterpret_cast<char *>(pb), nFramesize);
 
-      int startpos = buffer.find("Xing");
+      std::size_t startpos = buffer.find("Xing");
       if (startpos==std::string::npos)
         startpos = buffer.find("Info");
 
@@ -497,7 +495,7 @@ BOOL CMp3File::ExtractRegion(const INT64 nStart, const INT64 nStop, const mp3dat
       fread(pb,1,nFramesize,m_pFile);
       const std::string buffer((char *)pb, nFramesize);
   
-      int startpos = buffer.find("Xing");
+      std::size_t startpos = buffer.find("Xing");
       if (startpos==std::string::npos)
         startpos = buffer.find("Info");
 
@@ -1011,13 +1009,13 @@ BOOL CMp3File::GetID3v2(mp3data &data)
 
 BOOL CMp3File::GetVBRTags(mp3data &data)
 {
-  const int posn = ftell(m_pFile);
+  const long posn = ftell(m_pFile);
 
   std::vector<BYTE> buff(2000);
   fread(&buff[0],1,buff.size(),m_pFile);
 
   //xing.
-  int pos = 0;
+  std::size_t pos = 0;
   while (  (pos <= (buff.size() - 4)) && memcmp(&buff[0] + pos, "Xing", 4) && memcmp(&buff[0] + pos, "Info",4) )
     ++pos;
 
@@ -1148,12 +1146,12 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, const int len)
   USES_CONVERSION;
 
   const std::string b(buff,len);
-  const int pos = b.find("LAME");
+  const std::size_t pos = b.find("LAME");
 
   const std::string protag = "RCA mp3PRO Encoder";
   const std::string protag2 = "THOMSON mp3PRO Encoder ";
-  const int pos_pro = b.find(protag);
-  const int pos_pro2 = b.find(protag2);
+  const std::size_t pos_pro = b.find(protag);
+  const std::size_t pos_pro2 = b.find(protag2);
 
   tstring label;
 
@@ -1284,13 +1282,6 @@ int CMp3File::GuessFrameLength()
 
   return (pos1 - pos0);
 }
-
-int reverse_int(BYTE b[])
-{
-  return b[3] + b[2] * 0x100 + b[1] * 0x10000 + b[0] * 0x1000000;
-}
-
-
 
 bool CMp3File::IsMp3File(tstring fname)
 {
