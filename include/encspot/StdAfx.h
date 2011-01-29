@@ -3,7 +3,6 @@
 
 #include <string>
 
-
 #ifdef _WIN32
 
 #define NOMINMAX
@@ -50,7 +49,7 @@ typedef unsigned long DWORD;
 #define MYASSERT(expr) 
 #define LOG(expr) 
 
-TCHAR* itot10(const int value, TCHAR* const string, const std::size_t size);
-typedef std::basic_string<TCHAR> tstring ;
+typedef std::basic_string<TCHAR> tstring;
+tstring itoa10(int value);
 
 #endif

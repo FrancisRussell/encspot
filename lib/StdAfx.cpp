@@ -2,12 +2,14 @@
 // EncSpotStaticLib.pch will be the pre-compiled header
 // stdafx.obj will contain the pre-compiled type information
 
-#include <cstdio>
+#include <string>
+#include <sstream>
 #include <encspot/StdAfx.h>
 
-TCHAR* itot10(const int value, TCHAR* const string, const std::size_t size)
+tstring itoa10(const int value)
 {
-  _sntprintf(string, size, _T("%d"), value);
-  return string;
+  std::basic_ostringstream<TCHAR> stream;
+  stream << value;
+  return stream.str();
 }
 

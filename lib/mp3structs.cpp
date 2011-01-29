@@ -147,13 +147,9 @@ void mp3data_string::update_id3v1(const mp3data &data)
   id3v1_year    = id3trim(&data.id3v1tag.year[0],4);
   id3v1_title    = id3trim(&data.id3v1tag.title[0],30);
 
-  char b[2];
-  b[1] = 0;
-
   if (data.bId3v1Tag)
   {
-    USES_CONVERSION;
-    id3v1_track = itot10(data.id3v1_track,A2T(b),2);
+    id3v1_track = itoa10(data.id3v1_track);
 
     const int nGen = data.id3v1tag.genre;
     if (nGen < (sizeof(genre_names)/sizeof(char *)))
@@ -183,10 +179,9 @@ tstring mp3data_string::id3trim(const char *szStr, const int nLen)
 int mp3data_string::update_mpp(const mp3data &data, const BOOL monoquality)
 {
   const tstring profs[] = {_T("Thumb"), _T("Radio"), _T("Standard"), _T("Xtreme"), _T("Insane") };
-  TCHAR b[4];
 
   mpp_stream_version = _T("SV");
-  mpp_stream_version+=itot10(data.mpp_stream_version,b,4);
+  mpp_stream_version+=itoa10(data.mpp_stream_version);
 
   if (data.mpp_stream_profile <= 4)
     mpp_stream_profile = profs[data.mpp_stream_profile];
@@ -223,12 +218,11 @@ void mp3data_string::update_lame(const mp3data &data)
   const tstring modes[] = {_T("Mono"), _T("Stereo"), _T("Dual Stereo"), _T("Joint Stereo"), _T("Auto"), _T("Intensity"), _T("Unknown") };
   const tstring infreqs[]={_T("32kHz or less"), _T("44.1kHz"), _T("48kHz"), _T("more than 48kHz") };
 
-  TCHAR b[100];
-  lame_vbr_scale      = itot10(xing.vbr_scale,b,100);
-  lame_tag_revision    = itot10(xing.tag_revision,b,100);
+  lame_vbr_scale      = itoa10(xing.vbr_scale);
+  lame_tag_revision    = itoa10(xing.tag_revision);
   lame_vbr_method      = vbr_methods[xing.vbr_method];
   if (xing.lowpass)
-    lame_lowpass    = itot10(xing.lowpass,b,100);
+    lame_lowpass    = itoa10(xing.lowpass);
   else
     lame_lowpass    = _T("Unknown");
 
@@ -237,16 +231,16 @@ void mp3data_string::update_lame(const mp3data &data)
   lame_nogapcontinued    = (xing.encoding_flags & 4)?_T("yes"):_T("no");
   lame_nogapcontinuation  = (xing.encoding_flags & 8)?_T("yes"):_T("no");
 
-  lame_athtype      = itot10(xing.ath_type,b,100);
+  lame_athtype      = itoa10(xing.ath_type);
   
   if (xing.abr_bitrate == 0xFF)
     lame_abr_bitrate  =  _T("255 or more");
   else if (xing.abr_bitrate)
-    lame_abr_bitrate  = itot10(xing.abr_bitrate,b,100);
+    lame_abr_bitrate  = itoa10(xing.abr_bitrate);
   else
     lame_abr_bitrate  = _T("Unknown");
 
-  lame_noise_shaping  = itot10(xing.noise_shaping,b,100);
+  lame_noise_shaping  = itoa10(xing.noise_shaping);
   lame_unwise         = xing.unwise?_T("yes"):_T("no");
   lame_input_freq     = infreqs[xing.input_freq];
   lame_stereo_mode    = modes[xing.stereo_mode];
@@ -254,17 +248,16 @@ void mp3data_string::update_lame(const mp3data &data)
 
 int mp3data_string::update(const mp3data &data, BOOL monoquality)
 {
-  TCHAR b[100];
   update_lame(data);
   length    = convert_time(data.length);
 
   //frames
-  frames = itot10(data.frameCount,b,100);
+  frames = itoa10(data.frameCount);
   if (!data.all_read)
     frames+=_T("+");
 
   //filesize
-  fsize = itot10(data.fsize,b,100);
+  fsize = itoa10(data.fsize);
   if (data.fsize > 999)
   {
     fsize.insert(fsize.size() - 3,_T(","));
@@ -273,8 +266,8 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
   }
 
   mode    = get_mode(data.mode);
-  bitrate = itot10(data.bitrate, b, 100);
-  freq    = itot10(data.base_freq, b, 100);
+  bitrate = itoa10(data.bitrate);
+  freq    = itoa10(data.base_freq);
 
 
   //mp+
@@ -328,9 +321,9 @@ int mp3data_string::update(const mp3data &data, BOOL monoquality)
   //cut
   bad_last_frame = get_complete(data);
 
-  max_reservoir  = itot10(data.max_reservoir,b, 100);
-  av_reservoir  = itot10(data.av_reservoir,b, 100);
-  sync_errors  = itot10(data.sync_errors, b, 100);
+  max_reservoir  = itoa10(data.max_reservoir);
+  av_reservoir  = itoa10(data.av_reservoir);
+  sync_errors  = itoa10(data.sync_errors);
 
   //uses data already calculated
   const int quality = get_quality(data, monoquality);
@@ -356,7 +349,7 @@ tstring mp3data_string::convert_time(const double secs)
   tstring ret(b);
   int milli = ((int)((secs - s) * 1000))/100; 
   if (s < 10)
-    ret+=_T(".")+tstring(itot10(milli,b,16));
+    ret+=_T(".")+itoa10(milli);
   return ret;
 }
 
