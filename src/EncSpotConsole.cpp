@@ -45,14 +45,14 @@ int _tmain(int argc, TCHAR* argv[])
       }
       catch (const std::exception& e)
       {
-        _tprintf(_T("An error occured during scanning...\n"));
-        _tprintf(_T("File: %s\n"), item.c_str());
-        _tprintf(_T("Description: %s\n\n"), e.what());
+        _ftprintf(stderr, _T("An error occured during scanning...\n"));
+        _ftprintf(stderr, _T("File: %s\n"), item.c_str());
+        _ftprintf(stderr, _T("Description: %s\n\n"), e.what());
       }
     }
     else
     {
-      _tprintf(_T("File not found: %s\n\n"), item.c_str());
+      _ftprintf(stderr, _T("File not found: %s\n\n"), item.c_str());
     }
   }
 
