@@ -187,7 +187,7 @@ struct mp3data
   int quality;
 
 
-  tstring label;
+  TCHAR label[32];
   
   int bitrateCount[16];
   int blockCount[3];
@@ -244,7 +244,7 @@ struct mp3data
   int  mpp_stream_profile;
 
   //useful stuff...
-  tstring path;
+  TCHAR path[MAX_PATH];
   struct stat file_status;
 };
 
