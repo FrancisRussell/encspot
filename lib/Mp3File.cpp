@@ -340,10 +340,10 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
     if (bNewXing)
     {
       //read frame
-      uint8_t *const pb = new uint8_t[nFramesize];
+      std::vector<uint8_t> pb(nFramesize);
       fseek(m_pFile, nPos, SEEK_SET);
-      fread(pb,1,nFramesize,m_pFile);
-      const std::string buffer(reinterpret_cast<char *>(pb), nFramesize);
+      fread(&pb[0],1,nFramesize,m_pFile);
+      const std::string buffer(reinterpret_cast<char *>(&pb[0]), nFramesize);
 
       std::size_t startpos = buffer.find("Xing");
       if (startpos==std::string::npos)
@@ -354,25 +354,25 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
         if (data.xing_header.flags & FRAMES_FLAG)
         {
           const int new_frame_count = data.frameCount - (stop_pos - start_pos);
-          const int old_frame_count = ReadInt(pb + startpos + 8);
-          CreateI4(pb + startpos + 8,new_frame_count);
+          const int old_frame_count = ReadInt(&pb[startpos + 8]);
+          CreateI4(&pb[startpos + 8], new_frame_count);
         }
 
         if (data.xing_header.flags & BYTES_FLAG)
         {
-          const int old_bytes_count = ReadInt(pb + startpos + 12);
+          const int old_bytes_count = ReadInt(&pb[startpos + 12]);
           const int new_bytes_count = old_bytes_count - (stop_loc - start_loc);
-          CreateI4(pb + startpos + 12,new_bytes_count);
+          CreateI4(&pb[startpos + 12],new_bytes_count);
         }
 
         if (data.xing_header.bValidLame)
         {
           //adjust music length
           const int nLenOffset = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E - 2 - 4;
-          const int nOldLength = ExtractI4(pb + nLenOffset);
+          const int nOldLength = ExtractI4(&pb[nLenOffset]);
 
           const int nNewLength = nOldLength - (stop_loc - start_loc);
-          CreateI4(pb + nLenOffset,nNewLength);        
+          CreateI4(&pb[nLenOffset], nNewLength);        
 
           //adjust tag CRC
           const int nCRCLen = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E;
@@ -382,13 +382,12 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
           for (int i = 0x00; i<nCRCLen; ++i)
             crc = CRC_update_lookup(pb[i],crc);
 
-          const int nOldCRC = ExtractI2(pb + nCRCLen);
-          CreateI2(pb + nCRCLen,crc);  
+          const int nOldCRC = ExtractI2(&pb[nCRCLen]);
+          CreateI2(&pb[nCRCLen], crc);  
         }
       }
       
-      fwrite(pb,1,nFramesize,pNewFile);
-      delete[] pb;
+      fwrite(&pb[0], 1, nFramesize, pNewFile);
     }
     
     nInitPos += nFramesize;
@@ -492,10 +491,10 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
     {
     
       //read frame
-      uint8_t *const pb = new uint8_t[nFramesize];
+      std::vector<uint8_t> pb(nFramesize);
       fseek(m_pFile, nPos, SEEK_SET);
-      fread(pb,1,nFramesize,m_pFile);
-      const std::string buffer((char *)pb, nFramesize);
+      fread(&pb[0], 1, nFramesize, m_pFile);
+      const std::string buffer(reinterpret_cast<char*>(&pb[0]), nFramesize);
   
       std::size_t startpos = buffer.find("Xing");
       if (startpos==std::string::npos)
@@ -506,24 +505,24 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
         if (data.xing_header.flags & FRAMES_FLAG)
         {
           const int new_frame_count = data.frameCount - (stop_pos - start_pos);
-          const int old_frame_count = ReadInt(pb + startpos + 8);
-          CreateI4(pb + startpos + 8,new_frame_count);
+          const int old_frame_count = ReadInt(&pb[startpos + 8]);
+          CreateI4(&pb[startpos + 8], new_frame_count);
         }
 
         if (data.xing_header.flags & BYTES_FLAG)
         {
-          const int old_bytes_count = ReadInt(pb + startpos + 12);
+          const int old_bytes_count = ReadInt(&pb[startpos + 12]);
           const int new_bytes_count = old_bytes_count - (stop_loc - start_loc);
-          CreateI4(pb + startpos + 12,new_bytes_count);
+          CreateI4(&pb[startpos + 12], new_bytes_count);
         }
 
         if (data.xing_header.bValidLame)
         {
           //adjust music length
           const int nLenOffset = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E - 2 - 4;
-          const int nOldLength = ExtractI4(pb + nLenOffset);
+          const int nOldLength = ExtractI4(&pb[nLenOffset]);
           const int nNewLength = nOldLength - (stop_loc - start_loc);
-          CreateI4(pb + nLenOffset,nNewLength);        
+          CreateI4(&pb[nLenOffset] ,nNewLength);        
 
           //adjust tag CRC
           const int nCRCLen = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E;
@@ -532,13 +531,12 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
           for (int i = 0x00; i<nCRCLen; ++i)
             crc = CRC_update_lookup(pb[i],crc);
 
-          const int nOldCRC = ExtractI2(pb + nCRCLen);
-          CreateI2(pb + nCRCLen,crc);  
+          const int nOldCRC = ExtractI2(&pb[nCRCLen]);
+          CreateI2(&pb[nCRCLen] ,crc);  
         }
       }
 
-      fwrite(pb,1,nFramesize,pNewFile);
-      delete[] pb;
+      fwrite(&pb[0], 1, nFramesize, pNewFile);
     }
     
     nInitPos += nFramesize;

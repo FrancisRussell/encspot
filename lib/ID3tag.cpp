@@ -243,11 +243,10 @@ bool CID3Tag::RemoveTagFromFile()
   if (pFile==NULL)
     return false;  
 
-  uint8_t *const pBuff = new uint8_t[m_nSize+10];
-  memset(pBuff, 0, m_nSize+10);
+  std::vector<uint8_t> pBuff(m_nSize+10);
 
   fseek(pFile, 0, SEEK_SET);
-  fwrite(pBuff, 1, m_nSize+10, pFile);
+  fwrite(&pBuff[0], 1, pBuff.size(), pFile);
   fclose(pFile);
 
   return true;
