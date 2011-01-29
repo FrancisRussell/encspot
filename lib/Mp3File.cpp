@@ -1019,7 +1019,7 @@ BOOL CMp3File::GetVBRTags(mp3data &data)
   while (  (pos <= (buff.size() - 4)) && memcmp(&buff[0] + pos, "Xing", 4) && memcmp(&buff[0] + pos, "Info",4) )
     ++pos;
 
-  if (pos <= buff.size() - sizeof(data.xing_header))
+  if (pos + sizeof(data.xing_header) <= buff.size())
   {
     fseek(m_pFile, posn, SEEK_SET);
     data.xing_present = GetXingHeader(data, &buff[0]);
@@ -1035,7 +1035,7 @@ BOOL CMp3File::GetVBRTags(mp3data &data)
   while (  (pos <= (buff.size() - 4)) && memcmp(&buff[0] + pos, "VBRI", 4) )
     ++pos;
 
-  if (pos <= buff.size() - sizeof(data.xing_header))
+  if (pos + sizeof(data.vbri_header) <= buff.size())
   {
     fseek(m_pFile, posn, SEEK_SET);
     data.vbri_present = GetVBRIHeader(data, &buff[0]);
