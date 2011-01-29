@@ -577,24 +577,6 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
   //Prelims...
   data_out.path = m_tsFname.c_str();
 
-  //cache stuff
-#ifdef XXX
-  _stat(m_tsFname.c_str(), &data_out.file_status);
-
-  //maybe we get lucky and get a cache hit:
-  mp3data datatemp;
-  memset(&datatemp, 0, sizeof(datatemp));
-  if (!bDisableCache && g_pCache && g_pCache->Find(m_tsFname, data_out.file_status, datatemp, nFrameLimit))
-  {
-    data_out = datatemp;
-    
-    if (!ReportProgress(data_out, pHelp))
-      return TRUE;
-
-    return TRUE;
-  }
-#endif
-
   fseek(m_pFile, 0, SEEK_SET);
 
   const int last_frame_pos = SeekLastHeader(data_out.final10);
