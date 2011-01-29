@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <stdint.h>
 #include <encspot/StdAfx.h>
 #include <encspot/ID3tag.h>
 
@@ -10,8 +11,8 @@ CID3Tag::CID3Tag() :
                      m_nVersionRevision(0),
                      m_nFlags(0),
                      m_nSize(0),
-                     m_bExtendedHeader(FALSE),
-                     m_bExists(FALSE)
+                     m_bExtendedHeader(false),
+                     m_bExists(false)
 {
 }
 
@@ -20,9 +21,9 @@ CID3Tag::~CID3Tag()
 }
 
 //open and parse
-BOOL CID3Tag::Load(const TCHAR *szFname)
+bool CID3Tag::Load(const TCHAR *szFname)
 {
-  m_bExists = FALSE;
+  m_bExists = false;
   
   const int MAX_TAG_SIZE = 100000;
   m_sFname = szFname;
@@ -31,14 +32,14 @@ BOOL CID3Tag::Load(const TCHAR *szFname)
   m_nSize = 0;
 
   if (m_sFname.empty())
-    return FALSE;
+    return false;
 
   FILE *const pFile = _tfopen(m_sFname.c_str(), _T("rb"));
   if (pFile==NULL)
-    return FALSE;
+    return false;
 
   //assume id3 tag less than MAX_TAG_SIZE (excluding padding).
-  std::vector<BYTE> buff(MAX_TAG_SIZE);
+  std::vector<uint8_t> buff(MAX_TAG_SIZE);
   fread(&buff[0], 1, buff.size(), pFile);
   fclose(pFile);
   
@@ -47,7 +48,7 @@ BOOL CID3Tag::Load(const TCHAR *szFname)
       buff[2] == '3')
   {
     //id tag exists...
-    m_bExists = TRUE;
+    m_bExists = true;
     m_nVersionMajor = buff[3];
     m_nVersionRevision = buff[4];
     m_nFlags = buff[5];
@@ -60,10 +61,10 @@ BOOL CID3Tag::Load(const TCHAR *szFname)
     if (m_nSize > MAX_TAG_SIZE)
     {
       m_nSize = 0;
-      return FALSE;
+      return false;
     }
 
-    const BYTE *pFrame = &buff[0] + 10;
+    const uint8_t *pFrame = &buff[0] + 10;
     int exheadersize = 0;
     if (m_bExtendedHeader)
     {
@@ -90,20 +91,20 @@ BOOL CID3Tag::Load(const TCHAR *szFname)
         break;
     }
     
-    return TRUE;
+    return true;
   }
   else
   {
-    return FALSE;
+    return false;
   }
 }
 
-BOOL CID3Tag::Save()
+bool CID3Tag::Save()
 {
   const int total_size = m_nSize+10;
-  std::vector<BYTE> pBuff(total_size, 0);
+  std::vector<uint8_t> pBuff(total_size, 0);
   
-  BYTE *pBuffPtr = &pBuff[0];
+  uint8_t *pBuffPtr = &pBuff[0];
   memcpy(pBuffPtr, "ID3", 3);
   pBuffPtr+=3;
 
@@ -125,43 +126,43 @@ BOOL CID3Tag::Save()
   FILE* const pFile = _tfopen(m_sFname.c_str(), _T("r+b"));
 
   if (pFile==NULL)
-    return FALSE;  
+    return false;  
 
   fseek(pFile, 0, SEEK_SET);
   fwrite(&pBuff[0], 1, pBuff.size(), pFile);
   fclose(pFile);
 
-  return TRUE;
+  return true;
 }
 
 
-UINT32 CID3Tag::Read7Int(const BYTE *pBuff)
+uint32_t CID3Tag::Read7Int(const uint8_t *pBuff)
 {
-  BYTE size_a= *(pBuff + 0);
-  BYTE size_b= *(pBuff + 1);
-  BYTE size_c= *(pBuff + 2);
-  BYTE size_d= *(pBuff + 3);
+  uint8_t size_a= *(pBuff + 0);
+  uint8_t size_b= *(pBuff + 1);
+  uint8_t size_c= *(pBuff + 2);
+  uint8_t size_d= *(pBuff + 3);
 
-  UINT32 ret = size_d + (size_c << 7) + (size_b << 14) + (size_a << 21);
+  uint32_t ret = size_d + (size_c << 7) + (size_b << 14) + (size_a << 21);
 
   return ret;
 }
 
 
-UINT32 CID3Tag::ReadInt(const BYTE *pBuff)
+uint32_t CID3Tag::ReadInt(const uint8_t *pBuff)
 {
-  BYTE size_a= *(pBuff + 0);
-  BYTE size_b= *(pBuff + 1);
-  BYTE size_c= *(pBuff + 2);
-  BYTE size_d= *(pBuff + 3);
+  uint8_t size_a= *(pBuff + 0);
+  uint8_t size_b= *(pBuff + 1);
+  uint8_t size_c= *(pBuff + 2);
+  uint8_t size_d= *(pBuff + 3);
 
-  UINT32 ret = size_d + (size_c << 8) + (size_b << 16) + (size_a << 24);
+  uint32_t ret = size_d + (size_c << 8) + (size_b << 16) + (size_a << 24);
 
   return ret;
 }
 
 
-void CID3Tag::Write7Int(BYTE *pBuff, const UINT32 nVal)
+void CID3Tag::Write7Int(uint8_t *pBuff, const uint32_t nVal)
 {
   *(pBuff + 3) = nVal % 128;
   *(pBuff + 2) = (nVal >> 7)  % 128;
@@ -169,7 +170,7 @@ void CID3Tag::Write7Int(BYTE *pBuff, const UINT32 nVal)
   *(pBuff + 0) = (nVal >> 21) % 128;
 }
 
-void CID3Tag::WriteInt(BYTE *pBuff, const UINT32 nVal)
+void CID3Tag::WriteInt(uint8_t *pBuff, const uint32_t nVal)
 {
   *(pBuff + 3) = nVal % 256;
   *(pBuff + 2) = (nVal >> 8)  % 256;
@@ -233,30 +234,30 @@ void CID3Tag::MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, c
   frame.buffer += text;
 }
 
-BOOL CID3Tag::RemoveTagFromFile()
+bool CID3Tag::RemoveTagFromFile()
 {
   if (m_nSize==0)
-    return FALSE;
+    return false;
 
   FILE *const pFile = _tfopen(m_sFname.c_str(), _T("r+b"));
   if (pFile==NULL)
-    return FALSE;  
+    return false;  
 
-  BYTE *const pBuff = new BYTE[m_nSize+10];
+  uint8_t *const pBuff = new uint8_t[m_nSize+10];
   memset(pBuff, 0, m_nSize+10);
 
   fseek(pFile, 0, SEEK_SET);
   fwrite(pBuff, 1, m_nSize+10, pFile);
   fclose(pFile);
 
-  return TRUE;
+  return true;
 }
 
-BOOL CID3Tag::GetCueFrame(tstring &data) const
+bool CID3Tag::GetCueFrame(tstring &data) const
 {
   const int i = GetCueFrameNumber();
   if (i==-1)
-    return FALSE;
+    return false;
 
   const CFrame &frame = m_frames[i];
   if (frame.buffer.size() < 20)
@@ -272,7 +273,7 @@ BOOL CID3Tag::GetCueFrame(tstring &data) const
     else if (*szBuff==0x01)
     {
       MessageBox(GetActiveWindow(), _T("UNICODE not supported in this version."),0,0);
-      return FALSE;
+      return false;
     }
     else if (*szBuff==0x00)//not unicode
     {
@@ -288,20 +289,20 @@ BOOL CID3Tag::GetCueFrame(tstring &data) const
     }
   }  
 
-  return TRUE;
+  return true;
 }
 
-BOOL CID3Tag::GetTextFrame(const std::string &szID, std::string &data) const
+bool CID3Tag::GetTextFrame(const std::string &szID, std::string &data) const
 {
   const int frame_num = GetFrameNumber(szID);
 
   if (frame_num==-1)
-    return FALSE;
+    return false;
 
   const CFrame &frame = m_frames[frame_num];
 
   data = frame.buffer.empty() ? "" : frame.buffer.c_str()+1;
-  return TRUE;
+  return true;
 }
 
 
@@ -336,7 +337,7 @@ int CID3Tag::GetFrameNumber(const std::string &id) const
   return -1;
 }
 
-BOOL CID3Tag::CreateNewSpace(const int nSpace, iProgCallback *const pCallback)
+bool CID3Tag::CreateNewSpace(const int nSpace, iProgCallback *const pCallback)
 {
   tstring tpath(m_sFname);
   tpath += _T("_tmp");
@@ -345,21 +346,21 @@ BOOL CID3Tag::CreateNewSpace(const int nSpace, iProgCallback *const pCallback)
   if (pTfile == NULL) 
   {
     MessageBox(GetActiveWindow(), _T("Unable to open temp file for writing"),NULL,NULL);
-    return FALSE;
+    return false;
   }
 
-  std::vector<BYTE> pZero(nSpace, 0);
+  std::vector<uint8_t> pZero(nSpace, 0);
   fwrite(&pZero[0], 1, nSpace, pTfile);
 
   //1MB at a time
   const int nBlockSize = 1000000;
-  std::vector<BYTE> data(nBlockSize);
+  std::vector<uint8_t> data(nBlockSize);
   FILE *const pOld = _tfopen(m_sFname.c_str(), _T("rb"));
 
   if (pOld == NULL)
   {
     MessageBox(GetActiveWindow(), _T("Unable to open file for reading"), NULL, NULL);
-    return FALSE;
+    return false;
   }
 
   fseek(pOld, 0, SEEK_END);
@@ -384,7 +385,7 @@ BOOL CID3Tag::CreateNewSpace(const int nSpace, iProgCallback *const pCallback)
 
         //delete temp file
         _tremove(tpath.c_str());
-        return FALSE;
+        return false;
       }
     }
   }
@@ -403,7 +404,7 @@ BOOL CID3Tag::CreateNewSpace(const int nSpace, iProgCallback *const pCallback)
   else
     m_nSize+=nSpace;
 
-  return TRUE;
+  return true;
 }
 
 int CID3Tag::size() const

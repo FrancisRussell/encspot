@@ -38,8 +38,8 @@ int _tmain(int argc, TCHAR* argv[])
         mp3data_string data_string;
         data_string.path = item;
 
-        mp3.ProcessFrames(TRUE, data, -1, NULL, TRUE /*DisableCache*/, NULL);
-        data.quality = data_string.update(data, FALSE);
+        mp3.ProcessFrames(true, data, -1, NULL, true /*DisableCache*/, NULL);
+        data.quality = data_string.update(data, false);
         const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
         _tprintf((out_string + _T("\n\n\n\n")).c_str());
       }

@@ -5,25 +5,26 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <stdint.h>
 #include "Callbacks.h"
 #include "StdAfx.h"
 
 class CID3Tag  
 {
 private:
-  static UINT32 Read7Int(const BYTE *pBuff);
-  static UINT32 ReadInt(const BYTE *pBuff);
+  static uint32_t Read7Int(const uint8_t *pBuff);
+  static uint32_t ReadInt(const uint8_t *pBuff);
 
-  static void WriteInt(BYTE *pBuff, UINT32 nVal);
-  static void Write7Int(BYTE *pBuff, UINT32 nVal);
+  static void WriteInt(uint8_t *pBuff, uint32_t nVal);
+  static void Write7Int(uint8_t *pBuff, uint32_t nVal);
 
   struct CFrame
   {
     std::string buffer;
     char id[5];
 
-    BYTE m_flags_high;
-    BYTE m_flags_low;
+    uint8_t m_flags_high;
+    uint8_t m_flags_low;
 
     CFrame() : m_flags_high(0), m_flags_low(0)
     {
@@ -35,7 +36,7 @@ private:
       return 10+buffer.size(); 
     }
 
-    int Load(const BYTE *pFrame, const UINT32 nMaxSize)
+    int Load(const uint8_t *pFrame, const uint32_t nMaxSize)
     {
       memcpy(id, pFrame, 4);
       id[4] = 0;
@@ -44,7 +45,7 @@ private:
         return -1;
 
       pFrame+=4;
-      const UINT32 size = ReadInt(pFrame);
+      const uint32_t size = ReadInt(pFrame);
 
       //limit to 100KB to help spot errors...
       if (abs(size) > nMaxSize)
@@ -58,7 +59,7 @@ private:
       return (size + 10);    
     }
 
-    void Save(BYTE *pBuff) const
+    void Save(uint8_t *pBuff) const
     {
       memcpy(pBuff, id, 4);
       pBuff+=4;
@@ -74,31 +75,31 @@ private:
   friend struct CFrame;
 
   tstring m_sFname;
-  BYTE    m_nVersionMajor;
-  BYTE    m_nVersionRevision;
-  BYTE    m_nFlags;
+  uint8_t    m_nVersionMajor;
+  uint8_t    m_nVersionRevision;
+  uint8_t    m_nFlags;
   int     m_nSize;
 
-  BOOL m_bExtendedHeader;
+  bool m_bExtendedHeader;
 
   std::vector<CFrame> m_frames;
 
 public:
   int size() const;
 
-  BOOL    m_bExists;
+  bool    m_bExists;
 
-  BOOL    CreateNewSpace(int nSpace, iProgCallback *pCallback = NULL);
-  BOOL    GetTextFrame(const std::string &szID, std::string &data) const;
+  bool    CreateNewSpace(int nSpace, iProgCallback *pCallback = NULL);
+  bool    GetTextFrame(const std::string &szID, std::string &data) const;
   int     GetFrameNumber(const std::string &id) const;
   void    MakeTextFrame(const std::string szID, const std::string &data);
-  BOOL    RemoveTagFromFile();
+  bool    RemoveTagFromFile();
   void    MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, const char *szInfo);
   int     GetCueFrameNumber(tstring *pString = NULL) const;
-  BOOL    GetCueFrame(tstring &data) const;
+  bool    GetCueFrame(tstring &data) const;
   
-  BOOL    Load(const TCHAR *szFname);
-  BOOL    Save();
+  bool    Load(const TCHAR *szFname);
+  bool    Save();
   CID3Tag();
   virtual ~CID3Tag();
 };

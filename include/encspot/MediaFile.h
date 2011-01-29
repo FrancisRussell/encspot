@@ -12,7 +12,7 @@ protected:
   int     m_nFilesize;
 
 public:
-  BOOL    Open(const tstring &fname, const tstring &mode = _T("rb"));    
+  bool    Open(const tstring &fname, const tstring &mode = _T("rb"));    
   void    Close();
   CMediaFile();
   virtual ~CMediaFile();

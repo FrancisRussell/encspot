@@ -13,21 +13,8 @@
 #include <atlconv.h>
 
 #else
-#include <stdint.h>
 
-typedef unsigned short WORD;
 typedef char TCHAR;
-typedef char CHAR;
-typedef bool BOOL;
-static const BOOL TRUE = true;
-static const BOOL FALSE = false;
-typedef unsigned char BYTE;
-typedef uint16_t UINT16;
-typedef int16_t INT16;
-typedef uint32_t UINT32;
-typedef int32_t INT32;
-typedef int64_t INT64;
-typedef unsigned long DWORD;
 
 #define MAX_PATH          260
 #define MessageBox(a,b,c,d) printf(b)

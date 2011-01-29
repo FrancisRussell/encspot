@@ -12,7 +12,7 @@ CMediaFile::~CMediaFile()
     fclose(m_pFile);
 }
 
-BOOL CMediaFile::Open(const tstring &fname, const tstring &mode)
+bool CMediaFile::Open(const tstring &fname, const tstring &mode)
 {
   m_tsFname = fname;
 

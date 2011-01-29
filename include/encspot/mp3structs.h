@@ -2,7 +2,7 @@
 #define ENCSPOT_MP3STRUCTS_H
 
 #include <vector>
-#include <map>
+#include <stdint.h>
 #include <sys/stat.h>
 
 extern const char *const genre_names[];
@@ -34,30 +34,30 @@ struct XHEADDATA {
   //lame stuff...
   
   char encoder[12];
-  BOOL bValidLame;
-  BOOL bValidMusic;    //music_crc
-  BYTE tag_revision;
-  BYTE vbr_method;
+  bool bValidLame;
+  bool bValidMusic;    //music_crc
+  uint8_t tag_revision;
+  uint8_t vbr_method;
   int  lowpass;
-  BYTE replay_gain[8];
-  BYTE encoding_flags;
-  BYTE ath_type;
-  BYTE abr_bitrate;
-  BYTE encoder_delays[3];
-  BYTE unused[3];
+  uint8_t replay_gain[8];
+  uint8_t encoding_flags;
+  uint8_t ath_type;
+  uint8_t abr_bitrate;
+  uint8_t encoder_delays[3];
+  uint8_t unused[3];
   int   nFirstFrameSize;
   
   //misc
-  BYTE noise_shaping;
-  BYTE stereo_mode;
-  BOOL unwise;
-  BYTE input_freq;
+  uint8_t noise_shaping;
+  uint8_t stereo_mode;
+  bool unwise;
+  uint8_t input_freq;
   
   int    music_length;
-  UINT16  music_crc;
-  BOOL  music_crc_calculated;
+  uint16_t  music_crc;
+  bool  music_crc_calculated;
 
-  UINT16  tag_crc;
+  uint16_t  tag_crc;
 };
 
 //layout of VBRI tag frame:
@@ -110,16 +110,16 @@ struct XHEADDATA {
 
 struct VBRIDATA 
 {
-  UINT16 unknown1;
-  UINT16 unknown2;
-  UINT16 vbr_scale;        //e.g. -vbr 80 implies vbr_scale == 80
-  INT32 bitstream_bytes;
-  INT32 frames;
-  UINT16 toc_size;
-  UINT16 unknown3;
-  UINT16 unknown4;
-  UINT16 toc_mult;
-  UINT16 toc[MAX_TOC_SIZE];
+  uint16_t unknown1;
+  uint16_t unknown2;
+  uint16_t vbr_scale;        //e.g. -vbr 80 implies vbr_scale == 80
+  int32_t bitstream_bytes;
+  int32_t frames;
+  uint16_t toc_size;
+  uint16_t unknown3;
+  uint16_t unknown4;
+  uint16_t toc_mult;
+  uint16_t toc[MAX_TOC_SIZE];
 };
 
 
@@ -131,11 +131,11 @@ struct VBRIDATA
 struct info_lists
 {
   std::vector<int>    bigvalues;
-  std::vector<BOOL>  scalefac;
-  std::vector<BYTE>  bitlist;
+  std::vector<bool>  scalefac;
+  std::vector<uint8_t>  bitlist;
   std::vector<int>    reslist;
-  std::vector<BOOL>  modelist;
-  std::vector<BOOL>  blocklist;
+  std::vector<bool>  modelist;
+  std::vector<bool>  blocklist;
   std::vector<int>    byte_location;    //location of frame in file.
 };
 
@@ -144,7 +144,7 @@ struct info_lists
   char    header_sync[4];    //"Xing"
   int      flags;        //see above...
   int      frames;        //number of frames
-  BYTE      toc[100];      //table of contents
+  uint8_t      toc[100];      //table of contents
   int      scale;        //?
 };
 */
@@ -160,7 +160,7 @@ struct id3v1
   char album[30];
   char year[4];
   char comment[30];
-  BYTE genre;
+  uint8_t genre;
 };
 
 
@@ -174,15 +174,11 @@ struct id3v1
 //contains information about a media file. 
 struct mp3data
 {
-
-  DWORD type;
-
   //common stuff.....
-
   id3v1  id3v1tag;
   int    id3v1_track;
-  BOOL  bId3v1Tag;
-  BOOL  bId3v2Tag;
+  bool  bId3v1Tag;
+  bool  bId3v2Tag;
 
   int quality;
 
@@ -206,35 +202,35 @@ struct mp3data
 
   int max_reservoir;
   int av_reservoir;
-  INT64 total_reservoir;
+  int64_t total_reservoir;
 
 
   int sync_errors;
-  INT64 sync_errors_pos[MAX_SYNC_ERRORS];      //position in milliseconds
+  int64_t sync_errors_pos[MAX_SYNC_ERRORS];      //position in milliseconds
 
-  BOOL padding;
-  BOOL scfsi;
-  BOOL scalefac;
-  BOOL copyright;
-  BOOL original;
+  bool padding;
+  bool scfsi;
+  bool scalefac;
+  bool copyright;
+  bool original;
 
-  BOOL vbr;
-  BOOL cue;
+  bool vbr;
+  bool cue;
 
-  BOOL complete2;
+  bool complete2;
 
-  BOOL    all_read;
+  bool    all_read;
   int      first_frame_pos;
 
   int emphasis;
   int bitrate;
 
-  BYTE final10[10];
+  uint8_t final10[10];
 
-  BOOL xing_present;
+  bool xing_present;
   XHEADDATA xing_header;
 
-  BOOL vbri_present;
+  bool vbri_present;
   VBRIDATA  vbri_header;
 
 
@@ -314,12 +310,12 @@ public:
   tstring lame_stereo_mode;
 
   mp3data_string(){}
-  int    update(const mp3data &data, BOOL monoquality);
+  int    update(const mp3data &data, bool monoquality);
   tstring  get_report(const mp3data &data, const tstring &version = _T(""));
 
 private:
   void  update_lame(const mp3data &data);
-  int    update_mpp(const mp3data &data,BOOL monoquality);
+  int    update_mpp(const mp3data &data,bool monoquality);
   void  update_id3v1(const mp3data &data);
 
   tstring id3trim(const char *, int nLen);
@@ -327,7 +323,7 @@ private:
   tstring get_mode(int mode);
   tstring convert_time(const double secs);
   tstring guessenc(const mp3data &data);
-  int    get_quality(const mp3data &data, BOOL monoquality );
+  int    get_quality(const mp3data &data, bool monoquality );
   int    get_final_sum(const mp3data &data);
 };
 

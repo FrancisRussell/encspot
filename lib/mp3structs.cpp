@@ -8,7 +8,7 @@
 #include <encspot/mp3structs.h>
 
 
-int mp3data_string::get_quality(const mp3data &data, const BOOL monoquality)
+int mp3data_string::get_quality(const mp3data &data, const bool monoquality)
 {
   MYASSERT(!encoder.empty());
 
@@ -176,7 +176,7 @@ tstring mp3data_string::id3trim(const char *szStr, const int nLen)
   }
 }
 
-int mp3data_string::update_mpp(const mp3data &data, const BOOL monoquality)
+int mp3data_string::update_mpp(const mp3data &data, const bool monoquality)
 {
   const tstring profs[] = {_T("Thumb"), _T("Radio"), _T("Standard"), _T("Xtreme"), _T("Insane") };
 
@@ -241,7 +241,7 @@ void mp3data_string::update_lame(const mp3data &data)
   lame_stereo_mode    = modes[xing.stereo_mode];
 }
 
-int mp3data_string::update(const mp3data &data, BOOL monoquality)
+int mp3data_string::update(const mp3data &data, bool monoquality)
 {
   update_lame(data);
   length    = convert_time(data.length);
