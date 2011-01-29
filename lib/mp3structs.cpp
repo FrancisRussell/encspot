@@ -536,8 +536,6 @@ tstring mp3data_string::guessenc(const mp3data &data)
 
 tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
 {
-  TCHAR buff[256];
-
   const tstring tag = _T("--[ ") + version + _T(" ]--[ http://www.guerillasoft.com ]--");
   const int taglength = tag.size();
 
@@ -570,8 +568,7 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
 
     if (count>0)
     {
-      _sntprintf(buff,256,_T("%i"), brate_value);
-      tstring value = buff;
+      tstring value = itoa10(brate_value);
       value = tstring(std::max<int>(3 - value.size(),0),_T(' ')) + value + _T("     ");   
       out+=value;
 
@@ -579,6 +576,7 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
       out+=tstring(num_bars,'|');
       out+=tstring(45 - num_bars,' ');
 
+      TCHAR buff[256];
       _sntprintf(buff,256,_T("%.1f%%"),float(count * 100) / data.frameCount);
       tstring percent = buff;
       percent = tstring(std::max<int>(7 - percent.size(),0),_T(' ')) + percent;
@@ -590,24 +588,24 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
   out+=tstring(taglength,_T('-'))+_T("\r\n");
   out+=_T("\r\n");
 
-  std::pair<tstring,tstring> data_list[11]; 
-  data_list[0] = std::make_pair<tstring,tstring>(_T("Type"),    type);
-  data_list[1] = std::make_pair<tstring,tstring>(_T("Bitrate"),    bitrate);
-  data_list[2] = std::make_pair<tstring,tstring>(_T("Mode"),      mode);
-  data_list[3] = std::make_pair<tstring,tstring>(_T("Frequency"),    freq + _T(" Hz"));
-  data_list[4] = std::make_pair<tstring,tstring>(_T("Frames"),      frames);
-  data_list[5] = std::make_pair<tstring,tstring>(_T("Length"),      length);
-  data_list[6] = std::make_pair<tstring,tstring>(_T("Max. Reservoir"),  max_reservoir);
-  data_list[6] = std::make_pair<tstring,tstring>(_T("Av. Reservoir"),  av_reservoir);
-  data_list[7] = std::make_pair<tstring,tstring>(_T("Emphasis"),    emphasis);
-  data_list[8] = std::make_pair<tstring,tstring>(_T("Scalefac"),    scalefac);
-  data_list[9] = std::make_pair<tstring,tstring>(_T("Bad Last Frame"),  bad_last_frame);
-  data_list[10]= std::make_pair<tstring,tstring>(_T("Encoder"),    encoder);
+  std::vector< std::pair<tstring,tstring> > data_list; 
+  data_list.push_back(std::make_pair(_T("Type"),    type));
+  data_list.push_back(std::make_pair(_T("Bitrate"),    bitrate));
+  data_list.push_back(std::make_pair(_T("Mode"),      mode));
+  data_list.push_back(std::make_pair(_T("Frequency"),    freq + _T(" Hz")));
+  data_list.push_back(std::make_pair(_T("Frames"),      frames));
+  data_list.push_back(std::make_pair(_T("Length"),      length));
+  data_list.push_back(std::make_pair(_T("Max. Reservoir"),  max_reservoir));
+  data_list.push_back(std::make_pair(_T("Av. Reservoir"),  av_reservoir));
+  data_list.push_back(std::make_pair(_T("Emphasis"),    emphasis));
+  data_list.push_back(std::make_pair(_T("Scalefac"),    scalefac));
+  data_list.push_back(std::make_pair(_T("Bad Last Frame"),  bad_last_frame));
+  data_list.push_back(std::make_pair(_T("Encoder"),    encoder));
 
-  for (int i = 0; i<11; ++i)
+  for (unsigned i = 0; i<data_list.size(); ++i)
   {
-    tstring name = data_list[i].first;
-    tstring data = data_list[i].second;
+    const tstring& name = data_list[i].first;
+    const tstring& data = data_list[i].second;
 
     out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
   }
@@ -632,27 +630,27 @@ tstring mp3data_string::get_header_report(const mp3data &data)
 
   out+=_T("\r\nLame Header:\r\n\r\n");
 
-  std::pair<tstring,tstring> data_list[15]; 
-  data_list[0] = std::make_pair<tstring,tstring>(_T("Quality"),      lame_vbr_scale);
-  data_list[1] = std::make_pair<tstring,tstring>(_T("Version String"),    encoder);
-  data_list[2] = std::make_pair<tstring,tstring>(_T("Tag Revision"),    lame_tag_revision);
-  data_list[3] = std::make_pair<tstring,tstring>(_T("VBR Method"),      lame_vbr_method);
-  data_list[4] = std::make_pair<tstring,tstring>(_T("Lowpass Filter"),    lame_lowpass);
-  data_list[5] = std::make_pair<tstring,tstring>(_T("Psycho-acoustic Model"),      lame_nspsytune);
-  data_list[6] = std::make_pair<tstring,tstring>(_T("Safe Joint Stereo"),    lame_nssafejoint);
-  data_list[7] = std::make_pair<tstring,tstring>(_T("nogap (continued)"),  lame_nogapcontinued);
-  data_list[8] = std::make_pair<tstring,tstring>(_T("nogap (continuation)"),lame_nogapcontinuation);
-  data_list[9] = std::make_pair<tstring,tstring>(_T("ATH Type"),      lame_athtype);
-  data_list[10] = std::make_pair<tstring,tstring>(_T("ABR Bitrate"),    lame_abr_bitrate);
-  data_list[11] = std::make_pair<tstring,tstring>(_T("Noise Shaping"),    lame_noise_shaping);
-  data_list[12] = std::make_pair<tstring,tstring>(_T("Stereo Mode"),    lame_stereo_mode);
-  data_list[13] = std::make_pair<tstring,tstring>(_T("Unwise Settings Used"),  lame_unwise);
-  data_list[14] = std::make_pair<tstring,tstring>(_T("Input Frequency"),  lame_input_freq);
+  std::vector< std::pair<tstring, tstring> > data_list;
+  data_list.push_back(std::make_pair(_T("Quality"),      lame_vbr_scale));
+  data_list.push_back(std::make_pair(_T("Version String"),    encoder));
+  data_list.push_back(std::make_pair(_T("Tag Revision"),    lame_tag_revision));
+  data_list.push_back(std::make_pair(_T("VBR Method"),      lame_vbr_method));
+  data_list.push_back(std::make_pair(_T("Lowpass Filter"),    lame_lowpass));
+  data_list.push_back(std::make_pair(_T("Psycho-acoustic Model"),      lame_nspsytune));
+  data_list.push_back(std::make_pair(_T("Safe Joint Stereo"),    lame_nssafejoint));
+  data_list.push_back(std::make_pair(_T("nogap (continued)"),  lame_nogapcontinued));
+  data_list.push_back(std::make_pair(_T("nogap (continuation)"),lame_nogapcontinuation));
+  data_list.push_back(std::make_pair(_T("ATH Type"),      lame_athtype));
+  data_list.push_back(std::make_pair(_T("ABR Bitrate"),    lame_abr_bitrate));
+  data_list.push_back(std::make_pair(_T("Noise Shaping"),    lame_noise_shaping));
+  data_list.push_back(std::make_pair(_T("Stereo Mode"),    lame_stereo_mode));
+  data_list.push_back(std::make_pair(_T("Unwise Settings Used"),  lame_unwise));
+  data_list.push_back(std::make_pair(_T("Input Frequency"),  lame_input_freq));
   
-  for (int i=0; i<15; ++i)
+  for (unsigned i=0; i<data_list.size(); ++i)
   {
-    const tstring name = data_list[i].first;
-    const tstring data = data_list[i].second;
+    const tstring& name = data_list[i].first;
+    const tstring& data = data_list[i].second;
     out+=name+tstring(std::max<int>(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
   }
 
