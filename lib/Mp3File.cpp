@@ -4,16 +4,6 @@
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
-#ifdef XXX
-  class CPropertySheet;
-  #include "../core/encspot.h"
-  #include "../core/DataCache.h"
-  extern CDataCache *g_pCache;
-    
-  #include <sys/types.h>
-  #include <sys/stat.h>
-#endif
-
 const long freqs[9] = { 44100, 48000, 32000,
        22050, 24000, 16000 ,
        11025 , 12000 , 8000 };
