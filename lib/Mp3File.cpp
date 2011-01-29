@@ -1016,7 +1016,7 @@ BOOL CMp3File::GetVBRTags(mp3data &data)
 
   //xing.
   std::size_t pos = 0;
-  while (  (pos <= (buff.size() - 4)) && memcmp(&buff[0] + pos, "Xing", 4) && memcmp(&buff[0] + pos, "Info",4) )
+  while (  (pos + 4 <= buff.size()) && memcmp(&buff[0] + pos, "Xing", 4) && memcmp(&buff[0] + pos, "Info",4) )
     ++pos;
 
   if (pos + sizeof(data.xing_header) <= buff.size())
@@ -1032,7 +1032,7 @@ BOOL CMp3File::GetVBRTags(mp3data &data)
 
   //vbri
   pos = 0;
-  while (  (pos <= (buff.size() - 4)) && memcmp(&buff[0] + pos, "VBRI", 4) )
+  while (  (pos + 4 <= buff.size()) && memcmp(&buff[0] + pos, "VBRI", 4) )
     ++pos;
 
   if (pos + sizeof(data.vbri_header) <= buff.size())
