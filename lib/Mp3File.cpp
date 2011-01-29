@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
@@ -615,7 +616,7 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
 
   //locate first header
   if (SeekNextHeader()==-1)
-    throw "Cannot find valid mp3 header, scanning failed\n";
+    throw std::runtime_error("Cannot find valid mp3 header, scanning failed.");
 
   const int pos = ftell(m_pFile);
 
@@ -637,8 +638,8 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
   data_out.length = kbits / bitrate;
 
   if (!nFirstFramesize)
-    throw  "Hmm - I thought I'd found a header... \r\n"
-        "Please report this bug...\r\n";
+    throw std::runtime_error("Hmm - I thought I'd found a header... "
+      "If this is a valid mp3 file, please report this bug.");
 
   SetBaseInfo(data_out, hFirstHeader);
   data_out.frameCount = 0;
@@ -935,9 +936,8 @@ void CMp3File::SetBaseInfo(mp3data &data, const mp3header &header)
   data.base_freq  = header.freq;
 
   if (header.bitrate_idx == 0)
-    throw  "This file seems free format bitstream.\n"
-        "Free format bitstream is not supported.\n"
-        "Sorry.\n";
+    throw std::runtime_error("This file appears to be a free format bitstream. "
+      "Sorry, free format bitstreams are not supported.");
 
   data.copyright  = header.copyright;
   data.original  = header.original;

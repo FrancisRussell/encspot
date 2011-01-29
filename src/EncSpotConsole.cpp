@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <exception>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
@@ -29,15 +30,22 @@ int _tmain(int argc, TCHAR* argv[])
 
     if (mp3.Open(item))
     {
-      mp3data data;
-      memset(&data,0,sizeof(data));
-      mp3data_string data_string;
-      data_string.path = item;
+      try
+      {
+        mp3data data;
+        memset(&data,0,sizeof(data));
+        mp3data_string data_string;
+        data_string.path = item;
 
-      mp3.ProcessFrames(TRUE, data, -1, NULL, TRUE /*DisableCache*/, NULL);
-      data.quality = data_string.update(data, FALSE);
-      const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
-      _tprintf((out_string + _T("\n\n\n\n")).c_str());
+        mp3.ProcessFrames(TRUE, data, -1, NULL, TRUE /*DisableCache*/, NULL);
+        data.quality = data_string.update(data, FALSE);
+        const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
+        _tprintf((out_string + _T("\n\n\n\n")).c_str());
+      }
+      catch (const std::exception& e)
+      {
+        printf("An exception was thrown: %s\n", e.what());
+      }
     }
     else
     {
