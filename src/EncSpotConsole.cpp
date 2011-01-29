@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <cstdio>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
@@ -44,7 +45,8 @@ int _tmain(int argc, TCHAR* argv[])
       }
       catch (const std::exception& e)
       {
-        printf("An exception was thrown: %s\n", e.what());
+        USES_CONVERSION;
+        _tprintf(A2T("An exception was thrown: %s\n"), e.what());
       }
     }
     else
