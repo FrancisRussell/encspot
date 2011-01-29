@@ -332,32 +332,6 @@ private:
 };
 
 
-struct COLUMNDATA
-{
-  tstring name;
-  tstring description;
-  tstring group;  
-  tstring alignment;
-  int    offset_int;
-  int    offset_string;
-  int    list_col_width;
-  int    html_col_width;
-  BOOL  full_scan;
-
-  COLUMNDATA(tstring n, tstring d, tstring g, int oi, int ois, int lcw, int hcw,tstring align,BOOL bfs) :
-    name(n), description(d), group(g), alignment(align), offset_int(oi), offset_string(ois),
-    list_col_width(lcw), html_col_width(hcw), full_scan(bfs) {}
-
-
-  COLUMNDATA() : offset_int(-1),offset_string(-1), list_col_width(-1), html_col_width(-1), full_scan(TRUE) {}
-};
-
-
-typedef std::map<DWORD, COLUMNDATA> column_map_type;
-typedef column_map_type::iterator column_iterator;
-extern column_map_type g_column_map;
-
-
 #define MPG_MD_STEREO       0
 #define MPG_MD_JOINT_STEREO 1
 #define MPG_MD_DUAL_CHANNEL 2

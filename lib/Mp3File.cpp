@@ -4,16 +4,6 @@
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
-#ifdef XXX
-  class CPropertySheet;
-  #include "../core/encspot.h"
-  #include "../core/DataCache.h"
-  extern CDataCache *g_pCache;
-    
-  #include <sys/types.h>
-  #include <sys/stat.h>
-#endif
-
 const long freqs[9] = { 44100, 48000, 32000,
        22050, 24000, 16000 ,
        11025 , 12000 , 8000 };
@@ -586,24 +576,6 @@ BOOL CMp3File::ProcessFrames(const BOOL bFull, mp3data &data_out, const int nFra
 
   //Prelims...
   lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
-
-  //cache stuff
-#ifdef XXX
-  _stat(m_tsFname.c_str(), &data_out.file_status);
-
-  //maybe we get lucky and get a cache hit:
-  mp3data datatemp;
-  memset(&datatemp, 0, sizeof(datatemp));
-  if (!bDisableCache && g_pCache && g_pCache->Find(m_tsFname, data_out.file_status, datatemp, nFrameLimit))
-  {
-    data_out = datatemp;
-    
-    if (!ReportProgress(data_out, pHelp))
-      return TRUE;
-
-    return TRUE;
-  }
-#endif
 
   fseek(m_pFile, 0, SEEK_SET);
 
