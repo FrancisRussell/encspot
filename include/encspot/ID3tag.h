@@ -47,7 +47,7 @@ private:
       const uint32_t size = ReadInt(pFrame);
 
       //limit to 100KB to help spot errors...
-	  if (std::abs(size) > nMaxSize)
+      if (size > nMaxSize)
         return -1;
 
       pFrame+=4;
