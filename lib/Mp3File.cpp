@@ -1,4 +1,5 @@
 #include <string>
+#include <cstring>
 #include <vector>
 #include <algorithm>
 #include <encspot/StdAfx.h>

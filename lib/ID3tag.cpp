@@ -5,6 +5,51 @@
 #include <encspot/StdAfx.h>
 #include <encspot/ID3tag.h>
 
+CID3Tag::CFrame::CFrame() : m_flags_high(0), m_flags_low(0)
+{
+  memset(id, 0, sizeof(id));
+}
+
+int CID3Tag::CFrame::size() const 
+{ 
+  return 10+buffer.size(); 
+}
+
+int CID3Tag::CFrame::Load(const uint8_t *pFrame, const uint32_t nMaxSize)
+{
+  memcpy(id, pFrame, 4);
+  id[4] = 0;
+
+  if (id[0]==0)
+    return -1;
+
+  pFrame+=4;
+  const uint32_t size = ReadInt(pFrame);
+
+  //limit to 100KB to help spot errors...
+  if (size > nMaxSize)
+    return -1;
+
+  pFrame+=4;
+  m_flags_high = pFrame[0];
+  m_flags_low  = pFrame[1];
+  buffer.assign(reinterpret_cast<const char *>(pFrame)+2, size);
+  
+  return (size + 10);    
+}
+
+void CID3Tag::CFrame::Save(uint8_t *pBuff) const
+{
+  memcpy(pBuff, id, 4);
+  pBuff+=4;
+  WriteInt(pBuff, buffer.size());
+  pBuff+=4;
+  pBuff[0] = m_flags_high;
+  pBuff[1] = m_flags_low;
+  pBuff+=2;
+  memcpy(pBuff, buffer.data(), buffer.size());
+}
+
 CID3Tag::CID3Tag() :
                      m_nVersionMajor(3),
                      m_nVersionRevision(0),

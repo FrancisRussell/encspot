@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <cstdio>
+#include <cstring>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 

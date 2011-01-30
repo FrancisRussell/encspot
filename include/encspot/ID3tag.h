@@ -1,7 +1,6 @@
 #ifndef ENCSPOT_ID3TAG_H
 #define ENCSPOT_ID3TAG_H
 
-#include <cstring>
 #include <cstdlib>
 #include <string>
 #include <vector>
@@ -25,50 +24,10 @@ private:
     uint8_t m_flags_high;
     uint8_t m_flags_low;
 
-    CFrame() : m_flags_high(0), m_flags_low(0)
-    {
-      memset(id, 0, sizeof(id));
-    }
-
-    int size() const 
-    { 
-      return 10+buffer.size(); 
-    }
-
-    int Load(const uint8_t *pFrame, const uint32_t nMaxSize)
-    {
-      memcpy(id, pFrame, 4);
-      id[4] = 0;
-
-      if (id[0]==0)
-        return -1;
-
-      pFrame+=4;
-      const uint32_t size = ReadInt(pFrame);
-
-      //limit to 100KB to help spot errors...
-      if (size > nMaxSize)
-        return -1;
-
-      pFrame+=4;
-      m_flags_high = pFrame[0];
-      m_flags_low  = pFrame[1];
-      buffer.assign(reinterpret_cast<const char *>(pFrame)+2, size);
-      
-      return (size + 10);    
-    }
-
-    void Save(uint8_t *pBuff) const
-    {
-      memcpy(pBuff, id, 4);
-      pBuff+=4;
-      WriteInt(pBuff, buffer.size());
-      pBuff+=4;
-      pBuff[0] = m_flags_high;
-      pBuff[1] = m_flags_low;
-      pBuff+=2;
-      memcpy(pBuff, buffer.data(), buffer.size());
-    }
+    CFrame();
+    int size() const;
+    int Load(const uint8_t *pFrame, const uint32_t nMaxSize);
+    void Save(uint8_t *pBuff) const;
   };
 
   friend struct CFrame;
