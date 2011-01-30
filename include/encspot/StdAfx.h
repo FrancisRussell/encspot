@@ -12,7 +12,19 @@
 #include <tchar.h>
 #include <atlconv.h>
 
+typedef signed char   int8_t;
+typedef SHORT         int16_t;
+typedef INT32         int32_t;
+typedef INT64         int64_t;
+
+typedef unsigned char uint8_t;
+typedef USHORT        uint16_t;
+typedef UINT32        uint32_t;
+typedef UINT64        uint64_t;
+
 #else
+
+#include <stdint.h>
 
 typedef char TCHAR;
 

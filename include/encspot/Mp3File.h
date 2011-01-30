@@ -2,7 +2,6 @@
 #define ENCSPOT_MP3FILE_H
 
 #include <vector>
-#include <stdint.h>
 #include "ID3tag.h"
 #include "mp3structs.h"
 

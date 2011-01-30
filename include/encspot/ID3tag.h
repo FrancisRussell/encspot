@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include <stdint.h>
 #include "Callbacks.h"
 #include "StdAfx.h"
 
@@ -48,7 +47,7 @@ private:
       const uint32_t size = ReadInt(pFrame);
 
       //limit to 100KB to help spot errors...
-      if (abs(size) > nMaxSize)
+	  if (std::abs(size) > nMaxSize)
         return -1;
 
       pFrame+=4;

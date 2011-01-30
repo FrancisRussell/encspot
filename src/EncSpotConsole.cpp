@@ -1,32 +1,18 @@
 #include <vector>
 #include <string>
-#include <exception>
 #include <cstdio>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
-// Is this really needed, even under Windows?
-static tstring trim(const tstring& arg)
-{
-  if (arg.size()>=2 && arg[0]==_T('\"') && arg[arg.size()-1]==_T('\"'))
-  {
-    return tstring(arg.begin()+1, arg.end()-1);
-  }
-  else
-  {
-    return arg;
-  }
-}
-
 int _tmain(int argc, TCHAR* argv[])
 {
-  std::vector<tstring> list;
+  std::vector<tstring> files;
   for (int i=1; i<argc; ++i)
-    list.push_back(trim(argv[i]));
+    files.push_back(argv[i]);
 
-  for (unsigned i=0; i<list.size(); ++i)
+  for (unsigned i=0; i<files.size(); ++i)
   {
-    const tstring item = list[i];
+    const tstring& item = files[i];
     CMp3File mp3;
 
     if (mp3.Open(item))
@@ -43,11 +29,11 @@ int _tmain(int argc, TCHAR* argv[])
         const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
         _tprintf((out_string + _T("\n\n\n\n")).c_str());
       }
-      catch (const std::exception& e)
+      catch (const tstring& s)
       {
         _ftprintf(stderr, _T("An error occured during scanning...\n"));
         _ftprintf(stderr, _T("File: %s\n"), item.c_str());
-        _ftprintf(stderr, _T("Description: %s\n\n"), e.what());
+        _ftprintf(stderr, _T("Description: %s\n\n"), s.c_str());
       }
     }
     else
@@ -56,5 +42,5 @@ int _tmain(int argc, TCHAR* argv[])
     }
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }

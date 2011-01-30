@@ -149,6 +149,7 @@ void mp3data_string::update_id3v1(const mp3data &data)
 
   if (data.bId3v1Tag)
   {
+    USES_CONVERSION;
     id3v1_track = itoa10(data.id3v1_track);
 
     const unsigned nGen = data.id3v1tag.genre;

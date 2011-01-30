@@ -2,7 +2,6 @@
 #define ENCSPOT_MP3STRUCTS_H
 
 #include <vector>
-#include <stdint.h>
 #include <sys/stat.h>
 
 extern const char *const genre_names[];

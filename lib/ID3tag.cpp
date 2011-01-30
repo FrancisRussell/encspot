@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <string>
 #include <vector>
-#include <stdint.h>
 #include <encspot/StdAfx.h>
 #include <encspot/ID3tag.h>
 

@@ -1,8 +1,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <stdexcept>
-#include <stdint.h>
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
@@ -451,8 +449,8 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
   const int start_pos  = nStart / (frame_length * 1000) + 1;
   const int stop_pos  = nStop  / (frame_length * 1000);
 
-  int start_loc;
-  int stop_loc;
+  int64_t start_loc;
+  int64_t stop_loc;
 
   if (byte_locations.size() > stop_pos)
   {
@@ -615,7 +613,7 @@ bool CMp3File::ProcessFrames(const bool bFull, mp3data &data_out, const int nFra
 
   //locate first header
   if (SeekNextHeader()==-1)
-    throw std::runtime_error("Cannot find valid mp3 header.");
+    throw tstring(_T("Cannot find valid mp3 header."));
 
   const int pos = ftell(m_pFile);
 
@@ -633,12 +631,12 @@ bool CMp3File::ProcessFrames(const bool bFull, mp3data &data_out, const int nFra
   data_out.bitrate = bitrate;
 
   const int64_t bits = m_nFilesize * 8;
-  const float kbits = bits / 1000;
+  const int64_t kbits = bits / 1000;
   data_out.length = kbits / bitrate;
 
   if (!nFirstFramesize)
-    throw std::runtime_error("Hmm - I thought I'd found a header... "
-      "If this is a valid mp3 file, please report this bug.");
+    throw tstring(_T("Hmm - I thought I'd found a header... ")
+                  _T("If this is a valid mp3 file, please report this bug."));
 
   SetBaseInfo(data_out, hFirstHeader);
   data_out.frameCount = 0;
@@ -928,11 +926,11 @@ void CMp3File::SetBaseInfo(mp3data &data, const mp3header &header)
   data.base_freq  = header.freq;
 
   if (header.bitrate_idx == 0)
-    throw std::runtime_error("This file appears to be a free format bitstream. "
-      "Sorry, free format bitstreams are not supported.");
+    throw tstring(_T("This file appears to be a free format bitstream. ")
+                  _T("Sorry, free format bitstreams are not supported."));
 
-  data.copyright  = header.copyright;
-  data.original  = header.original;
+  data.copyright  = header.copyright > 0;
+  data.original  = header.original > 0;
   data.emphasis  = header.emphasis;
 }
 
@@ -1014,7 +1012,7 @@ bool CMp3File::GetVBRTags(mp3data &data)
   if (pos + sizeof(data.xing_header) <= buff.size())
   {
     fseek(m_pFile, posn, SEEK_SET);
-    data.xing_present = GetXingHeader(data, &buff[0]);
+    data.xing_present = GetXingHeader(data, &buff[0]) > 0;
     fseek(m_pFile, posn, SEEK_SET);
   }
   else
@@ -1503,7 +1501,7 @@ int CMp3File::GetXingHeader(mp3data &data, unsigned char *buf)
     const int nMisc = *buf;
     X->noise_shaping = nMisc % 4;
     X->stereo_mode   = (nMisc >> 2) % 8;
-    X->unwise     = (nMisc >> 5) % 2;
+    X->unwise     = ((nMisc >> 5) % 2) != 0;
     X->input_freq   = (nMisc >> 6) % 4;
     buf+=1;
 
