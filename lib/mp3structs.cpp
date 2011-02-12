@@ -349,25 +349,6 @@ tstring mp3data_string::convert_time(const double secs)
   return ret;
 }
 
-/*
-tstring mp3data_string::convert_time(const double secs)
-{
-  TCHAR t[20];
-  SYSTEMTIME time;
-  memset(&time,0,sizeof(time));
-  int s = (int)secs;
-  time.wSecond = s % 60;
-  time.wMinute = (s / 60) % 60;
-  time.wHour   = s / (60 * 60);
-  GetTimeFormat(LOCALE_USER_DEFAULT,TIME_FORCE24HOURFORMAT,&time,_T("hh':'mm':'ss"),t,sizeof(t));
-  tstring ret = t;
-  TCHAR b[4];
-  int milli = ((int)((secs - s) * 1000))/100; 
-  if (s < 10)
-    ret+=_T(".")+tstring(_itot(milli,b,10));
-  return ret;
-}*/
-
 tstring mp3data_string::get_mode(const int mode)
 {
   switch (mode)
