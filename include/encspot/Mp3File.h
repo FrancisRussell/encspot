@@ -10,9 +10,6 @@
 #define MPG_MD_DUAL_CHANNEL 2
 #define MPG_MD_MONO         3
 
-extern const char *const genre_names[];
-
-
 #define MPEGID_1            0x0      //MPEG Version 1 (ISO/IEC 11172-3)     
 #define MPEGID_2            0x1      //MPEG Version 2 (ISO/IEC 13818-3)
 

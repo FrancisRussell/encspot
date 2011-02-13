@@ -5,11 +5,11 @@
 #include <encspot/StdAfx.h>
 #include <encspot/Mp3File.h>
 
-const long freqs[9] = { 44100, 48000, 32000,
+static const long freqs[9] = { 44100, 48000, 32000,
        22050, 24000, 16000 ,
        11025 , 12000 , 8000 };
   
- const int tabsel_123[2][3][16] = {
+const int tabsel_123[2][3][16] = {
   { {128,32,64,96,128,160,192,224,256,288,320,352,384,416,448,},
     {128,32,48,56, 64, 80, 96,112,128,160,192,224,256,320,384,},
     {128,32,40,48, 56, 64, 80, 96,112,128,160,192,224,256,320,} },
@@ -21,7 +21,7 @@ const long freqs[9] = { 44100, 48000, 32000,
 
 
 //crc lookup table
-unsigned int crc16tab[256] =
+static const unsigned int crc16tab[256] =
 {
   0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
   0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
