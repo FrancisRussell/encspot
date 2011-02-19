@@ -349,7 +349,7 @@ bool CID3Tag::GetTextFrame(const std::string &szID, std::string &data) const
 }
 
 
-void CID3Tag::MakeTextFrame(const std::string szID, const std::string &data)
+void CID3Tag::MakeTextFrame(const std::string& szID, const std::string &data)
 {
   int frame_num = GetFrameNumber(szID);
 

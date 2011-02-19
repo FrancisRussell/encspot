@@ -50,7 +50,7 @@ public:
   bool    CreateNewSpace(int nSpace, iProgCallback *pCallback = NULL);
   bool    GetTextFrame(const std::string &szID, std::string &data) const;
   int     GetFrameNumber(const std::string &id) const;
-  void    MakeTextFrame(const std::string szID, const std::string &data);
+  void    MakeTextFrame(const std::string& szID, const std::string &data);
   bool    RemoveTagFromFile();
   void    MakeCueSheetFrame(const char *szCuesheet, const char *szVersion, const char *szInfo);
   int     GetCueFrameNumber(tstring *pString = NULL) const;

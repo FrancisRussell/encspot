@@ -786,7 +786,6 @@ int CMp3File::ProcessNextFrame(mp3data &data_out, info_lists *pInfoLists)
   {
     for(int ch=0; ch<hHeader.channels; ++ch)
     {
-      int region,window,window_switching_flag;
       readBits(12);          // part2_3_length
       nBigValues = readBits(9);    // big_values
       readBits(8);          // global_gain
@@ -794,13 +793,13 @@ int CMp3File::ProcessNextFrame(mp3data &data_out, info_lists *pInfoLists)
         readBits(4);        // scalefac_compress
       else 
         readBits(9);        // scalefac_compress
-      window_switching_flag = readBits(1);
+      int window_switching_flag = readBits(1);
       if (window_switching_flag == 1) 
       {
         int block_type = readBits(2);          // block_type
         int mixed_block_flag = readBits(1);        // mixed_block_flag
-        for(region=0;region<2;region++) readBits(5);  // table_select
-        for(window=0;window<3;window++) readBits(3);  // subblock_gain
+        for(int region=0;region<2;region++) readBits(5);  // table_select
+        for(int window=0;window<3;window++) readBits(3);  // subblock_gain
         if (block_type == 2) 
         {
           if (mixed_block_flag) 
