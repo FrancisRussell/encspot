@@ -1,3 +1,15 @@
+encspot (2.01+mtn20110228) unstable; urgency=low
+
+  * General code cleanup:
+    - Use C99 types instead of Windows ones.
+    - Compilation warning fixes.
+    - Improved itoa replacement.
+    - Unused code removal.
+    - Fixes to incorrect use of unsigned arithmetic.
+  * Print the exceptions thrown by EncSpot.
+
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 28 Feb 2011 02:53:46 +0000
+
 encspot (2.01+mtn20100426) unstable; urgency=low
 
   * Many fixes for const-correctness.
