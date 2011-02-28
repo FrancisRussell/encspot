@@ -1,8 +1,3 @@
-// stdafx.cpp : source file that includes just the standard includes
-// EncSpotStaticLib.pch will be the pre-compiled header
-// stdafx.obj will contain the pre-compiled type information
-
-#include <string>
 #include <sstream>
 #include <encspot/Common.hpp>
 
@@ -12,4 +7,3 @@ tstring itoa10(const int value)
   stream << value;
   return stream.str();
 }
-
