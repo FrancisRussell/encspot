@@ -11,7 +11,7 @@ trap "rm -rf ${TEMP_DIR}" EXIT HUP INT QUIT TERM
 
 mtn co -r ${CURRENT_REVISION} ${SOURCE_DIR}
 rm -rf ${SOURCE_DIR}/{_MTN,make_tarball}
-mtn log > ${SOURCE_DIR}/CHANGELOG
+mtn log --no-files > ${SOURCE_DIR}/CHANGELOG
 pushd ${TEMP_DIR}
 tar -jcf "${TARBALL_NAME}" "${PACKAGE_NAME}"
 popd
