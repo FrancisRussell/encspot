@@ -3,7 +3,7 @@ Section: sound
 Priority: extra
 Maintainer: Francis Russell <francis@unchartedbackwaters.co.uk>
 Build-Depends: debhelper (>= 7.0.50), cmake
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 Homepage: http://www.unchartedbackwaters.co.uk/pyblosxom/static/encspot
 
 Package: encspot

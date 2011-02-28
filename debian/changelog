@@ -7,8 +7,9 @@ encspot (2.01+mtn20110228) unstable; urgency=low
     - Unused code removal.
     - Fixes to incorrect use of unsigned arithmetic.
   * Print the exceptions thrown by EncSpot.
+  * Update standards version.
 
- -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 28 Feb 2011 02:53:46 +0000
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 28 Feb 2011 03:10:03 +0000
 
 encspot (2.01+mtn20100426) unstable; urgency=low
 
