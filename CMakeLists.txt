@@ -3,7 +3,7 @@ project(encspot)
 
 if (DEFINED CMAKE_HOST_UNIX)
   add_definitions(-Wall -pedantic -O2)
-  set(CMAKE_INSTALL_PREFIX "/")
+  set(CMAKE_INSTALL_PREFIX "/usr/")
 endif()
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
