@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "ID3tag.hpp"
-#include "mp3structs.hpp"
+#include "Mp3Structs.hpp"
 
 #define MPG_MD_STEREO       0
 #define MPG_MD_JOINT_STEREO 1

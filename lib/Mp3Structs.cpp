@@ -5,7 +5,7 @@
 #include <utility>
 #include <cstring>
 #include <encspot/Common.hpp>
-#include <encspot/mp3structs.hpp>
+#include <encspot/Mp3Structs.hpp>
 
 
 int mp3data_string::get_quality(const mp3data &data, const bool monoquality)
