@@ -9,46 +9,5 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-makefiles: makefiles-stamp
-makefiles-stamp:
-	dh_testdir
-	cmake .
-	touch $@
-
-clean:  makefiles
-	dh_testdir
-	make clean
-	dh_clean
-	rm -f build-stamp
-
-build: build-stamp
-build-stamp: makefiles
-	$(MAKE)
-	touch $@
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installchangelogs
-	dh_installdocs
-	dh_install
-	dh_installman encspot.1
-
-binary: binary-indep binary-arch
-
-binary-indep: install
-
-binary-arch:
-	dh_testdir
-	dh_testroot
-	dh_strip
-	dh_shlibdeps
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-.PHONY: makefiles clean build install binary binary-indep binary-arch
+%:
+	dh $@

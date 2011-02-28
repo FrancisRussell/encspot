@@ -8,8 +8,9 @@ encspot (2.01+mtn20110228) unstable; urgency=low
     - Fixes to incorrect use of unsigned arithmetic.
   * Print the exceptions thrown by EncSpot.
   * Update standards version.
+  * Switch to debhelper automatic scripts. 
 
- -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 28 Feb 2011 03:10:03 +0000
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 28 Feb 2011 03:56:49 +0000
 
 encspot (2.01+mtn20100426) unstable; urgency=low
 
