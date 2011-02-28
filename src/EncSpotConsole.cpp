@@ -2,8 +2,8 @@
 #include <string>
 #include <cstdio>
 #include <cstring>
-#include <encspot/Common.h>
-#include <encspot/Mp3File.h>
+#include <encspot/Common.hpp>
+#include <encspot/Mp3File.hpp>
 
 int _tmain(int argc, TCHAR* argv[])
 {

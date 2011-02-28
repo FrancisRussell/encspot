@@ -1,7 +1,7 @@
 #ifndef ENCSPOT_MEDIAFILE_H
 #define ENCSPOT_MEDIAFILE_H
 
-#include <encspot/Common.h>
+#include <encspot/Common.hpp>
 #include <cstdio>
 
 class CMediaFile  

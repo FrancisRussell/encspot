@@ -4,8 +4,8 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include "Callbacks.h"
-#include "Common.h"
+#include "Callbacks.hpp"
+#include "Common.hpp"
 
 class CID3Tag  
 {

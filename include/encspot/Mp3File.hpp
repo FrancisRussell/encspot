@@ -2,8 +2,8 @@
 #define ENCSPOT_MP3FILE_H
 
 #include <vector>
-#include "ID3tag.h"
-#include "mp3structs.h"
+#include "ID3tag.hpp"
+#include "mp3structs.hpp"
 
 #define MPG_MD_STEREO       0
 #define MPG_MD_JOINT_STEREO 1
@@ -13,7 +13,7 @@
 #define MPEGID_1            0x0      //MPEG Version 1 (ISO/IEC 11172-3)     
 #define MPEGID_2            0x1      //MPEG Version 2 (ISO/IEC 13818-3)
 
-#include "MediaFile.h"
+#include "MediaFile.hpp"
 
 struct mp3header
 {

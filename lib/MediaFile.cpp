@@ -1,6 +1,6 @@
 #include <cstdio>
-#include <encspot/Common.h>
-#include <encspot/MediaFile.h>
+#include <encspot/Common.hpp>
+#include <encspot/MediaFile.hpp>
 
 CMediaFile::CMediaFile() : m_pFile(NULL), m_nFilesize(0)
 {

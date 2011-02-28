@@ -2,8 +2,8 @@
 #include <cstdio>
 #include <string>
 #include <vector>
-#include <encspot/Common.h>
-#include <encspot/ID3tag.h>
+#include <encspot/Common.hpp>
+#include <encspot/ID3tag.hpp>
 
 CID3Tag::CFrame::CFrame() : m_flags_high(0), m_flags_low(0)
 {
