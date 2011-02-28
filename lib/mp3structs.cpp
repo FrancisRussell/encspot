@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 #include <cstring>
-#include <encspot/StdAfx.h>
+#include <encspot/Common.h>
 #include <encspot/mp3structs.h>
 
 

@@ -2,7 +2,7 @@
 #include <string>
 #include <cstdio>
 #include <cstring>
-#include <encspot/StdAfx.h>
+#include <encspot/Common.h>
 #include <encspot/Mp3File.h>
 
 int _tmain(int argc, TCHAR* argv[])

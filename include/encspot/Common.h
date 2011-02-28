@@ -1,5 +1,5 @@
-#ifndef ENCSPOT_STDAFX_H
-#define ENCSPOT_STDAFX_H
+#ifndef ENCSPOT_COMMON_H
+#define ENCSPOT_COMMON_H
 
 #include <string>
 

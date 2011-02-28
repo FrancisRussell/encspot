@@ -2,7 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <algorithm>
-#include <encspot/StdAfx.h>
+#include <encspot/Common.h>
 #include <encspot/Mp3File.h>
 
 static const long freqs[9] = { 44100, 48000, 32000,

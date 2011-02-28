@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include "Callbacks.h"
-#include "StdAfx.h"
+#include "Common.h"
 
 class CID3Tag  
 {

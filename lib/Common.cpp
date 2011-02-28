@@ -4,7 +4,7 @@
 
 #include <string>
 #include <sstream>
-#include <encspot/StdAfx.h>
+#include <encspot/Common.h>
 
 tstring itoa10(const int value)
 {

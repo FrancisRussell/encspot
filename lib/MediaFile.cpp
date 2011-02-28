@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <encspot/StdAfx.h>
+#include <encspot/Common.h>
 #include <encspot/MediaFile.h>
 
 CMediaFile::CMediaFile() : m_pFile(NULL), m_nFilesize(0)
