@@ -36,7 +36,7 @@ private:
   uint8_t    m_nVersionMajor;
   uint8_t    m_nVersionRevision;
   uint8_t    m_nFlags;
-  int     m_nSize;
+  uint32_t   m_nSize;
 
   bool m_bExtendedHeader;
 

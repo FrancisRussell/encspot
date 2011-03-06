@@ -225,13 +225,11 @@ int CMp3File::SeekLastHeader(uint8_t *const final10)
   if (i==5)
     return -1;
 
-  int currpos = 0;
-
   //ok we've got a header... now move forward to the 
   //end of the file.
   for (;;)
   {
-    currpos = ftell(m_pFile);
+    const long currpos = ftell(m_pFile);
   
     const int head = ReadInt();
     mp3header mhHead;
@@ -244,7 +242,10 @@ int CMp3File::SeekLastHeader(uint8_t *const final10)
       {
         //copy last 10 bytes into buffer
         fseek(m_pFile,currpos - finalsize - 1,SEEK_SET);
-        fread(final10, 1, finalsize, m_pFile);
+        const std::size_t read = fread(final10, 1, finalsize, m_pFile);
+
+        if (read != finalsize)
+          return -1;
       }
 
       return 1;
@@ -257,7 +258,10 @@ int CMp3File::SeekLastHeader(uint8_t *const final10)
       {
         //copy last 10 bytes into buffer
         fseek(m_pFile,currpos + framesize - finalsize - 1,SEEK_SET);
-        fread(final10, 1, finalsize, m_pFile);
+        const std::size_t read = fread(final10, 1, finalsize, m_pFile);
+
+        if (read != finalsize)
+          return -1;
       }
 
       return 1;
@@ -488,11 +492,14 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
 
     if (bNewXing)
     {
-    
       //read frame
       std::vector<uint8_t> pb(nFramesize);
       fseek(m_pFile, nPos, SEEK_SET);
-      fread(&pb[0], 1, nFramesize, m_pFile);
+      const std::size_t read = fread(&pb[0], 1, nFramesize, m_pFile);
+
+      if (read != nFramesize)
+        return false;
+
       const std::string buffer(reinterpret_cast<char*>(&pb[0]), nFramesize);
   
       std::size_t startpos = buffer.find("Xing");
@@ -1002,14 +1009,14 @@ bool CMp3File::GetVBRTags(mp3data &data)
   const long posn = ftell(m_pFile);
 
   std::vector<uint8_t> buff(2000);
-  fread(&buff[0],1,buff.size(),m_pFile);
+  const std::size_t read = fread(&buff[0],1,buff.size(),m_pFile);
 
   //xing.
   std::size_t pos = 0;
-  while (  (pos + 4 <= buff.size()) && memcmp(&buff[0] + pos, "Xing", 4) && memcmp(&buff[0] + pos, "Info",4) )
+  while (  (pos + 4 <= read) && memcmp(&buff[pos], "Xing", 4) && memcmp(&buff[pos], "Info",4) )
     ++pos;
 
-  if (pos + sizeof(data.xing_header) <= buff.size())
+  if (pos + sizeof(data.xing_header) <= read)
   {
     fseek(m_pFile, posn, SEEK_SET);
     data.xing_present = GetXingHeader(data, &buff[0]) > 0;
@@ -1022,10 +1029,10 @@ bool CMp3File::GetVBRTags(mp3data &data)
 
   //vbri
   pos = 0;
-  while (  (pos + 4 <= buff.size()) && memcmp(&buff[0] + pos, "VBRI", 4) )
+  while (  (pos + 4 <= read) && memcmp(&buff[pos], "VBRI", 4) )
     ++pos;
 
-  if (pos + sizeof(data.vbri_header) <= buff.size())
+  if (pos + sizeof(data.vbri_header) <= read)
   {
     fseek(m_pFile, posn, SEEK_SET);
     data.vbri_present = GetVBRIHeader(data, &buff[0]);
@@ -1105,9 +1112,6 @@ bool CMp3File::DetectVBR(mp3data &data_out)
 
 tstring CMp3File::GetLabels(const XHEADDATA &xing)
 {
-  tstring ret;
-  std::vector<char> buff(1024);
-
   if (xing.encoder[0]!=0)
   {
     USES_CONVERSION;
@@ -1118,20 +1122,22 @@ tstring CMp3File::GetLabels(const XHEADDATA &xing)
   mp3data dummy;
   GetID3v2(dummy);
 
-  const int count = fread(&buff[0], 1, buff.size(), m_pFile);
-  ret = GetLabelsFromBuffer(&buff[0], buff.size());
+  std::vector<char> buff(1024);
+  std::size_t count = fread(&buff[0], 1, buff.size(), m_pFile);
+  const tstring ret = GetLabelsFromBuffer(&buff[0], count);
+
   if (!ret.empty())
     return ret;
 
   fseek(m_pFile,-1024,SEEK_END);
-  fread(&buff[0], 1, buff.size(),m_pFile);
+  count = fread(&buff[0], 1, buff.size(), m_pFile);
   fseek(m_pFile, 0, SEEK_SET);
   
-  return GetLabelsFromBuffer(&buff[0], buff.size());
+  return GetLabelsFromBuffer(&buff[0], count);
 }
 
 
-tstring CMp3File::GetLabelsFromBuffer(const char *buff, const int len)
+tstring CMp3File::GetLabelsFromBuffer(const char *buff, const std::size_t len)
 {
   USES_CONVERSION;
 
@@ -1346,7 +1352,6 @@ tstring CMp3File::TranslateLabel(const tstring &label)
 //returns a 16 bit int
 int CMp3File::GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp)
 {
- 
   MYASSERT(m_pFile);
   
   XHEADDATA *X = &data.xing_header;
@@ -1355,11 +1360,13 @@ int CMp3File::GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp)
 
   //compute music crc.
   //first: how long is this frame??
-  int nHead;
-  uint8_t b[4];
   fseek(m_pFile, data.first_frame_pos,SEEK_SET);
-  fread(b,1,4,m_pFile);
-  nHead = ReadInt(b);
+  uint8_t b[4];
+  std::size_t read = fread(b,1,4,m_pFile);
+  if (read != 4) 
+    return 0;
+
+  int nHead = ReadInt(b);
 
   mp3header header;
   X->nFirstFrameSize = MakeHeader(nHead,header);
@@ -1367,7 +1374,10 @@ int CMp3File::GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp)
     return 0;
 
   fseek(m_pFile, X->nFirstFrameSize + nInitPos,SEEK_SET);
-  fread(b,1,4,m_pFile);              //check we're really at another header
+  read = fread(b,1,4,m_pFile);              //check we're really at another header
+  if (read != 4) 
+    return 0;
+
   nHead = ReadInt(b);
 
   if (!MakeHeader(nHead,header))
@@ -1381,12 +1391,15 @@ int CMp3File::GetMusicCRC(mp3data &data, const CMp3File::sink_mini *pHelp)
   if (data.bId3v1Tag)
     nToGo-=128;
 
-  int64_t nTotal= nToGo;
+  const int64_t nTotal = nToGo;
   std::vector<char> buffer(1000000);
-  while (nToGo)
+  while (nToGo > 0)
   {
-    fread(&buffer[0], 1, buffer.size(), m_pFile);
-    for (unsigned count = 0; count < buffer.size(); ++count)
+    read = fread(&buffer[0], 1, buffer.size(), m_pFile);
+    if (read == 0)
+      return 0;
+
+    for (std::size_t count = 0; count < read; ++count)
     {
       music_crc = CRC_update_lookup(buffer[count],music_crc);
       nToGo--;
@@ -1711,15 +1724,15 @@ bool CMp3File::AppendMP3(mp3data datain1, const tstring &path2, const tstring &p
     tag = data2.id3v1tag;
   }
 
-  int bit1 = datain1.bitrate;
-  int bit2 = data2.bitrate;
+  const int bit1 = datain1.bitrate;
+  const int bit2 = data2.bitrate;
 
   if (bit1!=bit2)
   {
-    TCHAR mesg[] = _T(  "These two files have different bitrates. The resulting file will therefore\n")
-              _T("be a VBR file. It should play correctly, but it's length may be displayed\n ")
-              _T("incorrectly by some players.");
-    MessageBox(GetActiveWindow(), mesg,_T("FYI"),MB_ICONINFORMATION);
+    const TCHAR* mesg = _T("These two files have different bitrates. The resulting file will therefore\n")
+                        _T("be a VBR file. It should play correctly, but it's length may be displayed\n ")
+                        _T("incorrectly by some players.");
+    MessageBox(GetActiveWindow(), mesg, _T("FYI"), MB_ICONINFORMATION);
   }
 
   FILE *pNewFile = _tfopen(pathout.c_str(), _T("wb"));

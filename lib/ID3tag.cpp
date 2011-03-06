@@ -84,10 +84,12 @@ bool CID3Tag::Load(const TCHAR *szFname)
 
   //assume id3 tag less than MAX_TAG_SIZE (excluding padding).
   std::vector<uint8_t> buff(MAX_TAG_SIZE);
-  fread(&buff[0], 1, buff.size(), pFile);
+  const std::size_t read = fread(&buff[0], 1, buff.size(), pFile);
   fclose(pFile);
+
   
-  if (buff[0] == 'I' &&
+  if (read >= 10 &&
+      buff[0] == 'I' &&
       buff[1] == 'D' &&
       buff[2] == '3')
   {
@@ -100,26 +102,31 @@ bool CID3Tag::Load(const TCHAR *szFname)
 
     m_nSize = Read7Int(&buff[6]);
 
-    //probably bad format if m_nSize too large...:)
-    //in any case we're not gonna handle it.
-    if (m_nSize > MAX_TAG_SIZE)
+    // probably bad format if m_nSize too large...:)
+    // in any case we're not gonna handle it.
+    // Also bail out if extended header flag is set, but there is not 
+    // enough header data.
+    if (m_nSize > read || (m_bExtendedHeader && read < 16))
     {
       m_nSize = 0;
       return false;
     }
 
-    const uint8_t *pFrame = &buff[0] + 10;
-    int exheadersize = 0;
+    const uint8_t *pFrame = &buff[10];
+    uint32_t exheadersize = 0;
     if (m_bExtendedHeader)
     {
-      exheadersize = ReadInt(&buff[10]) + 4;
+      exheadersize = ReadInt(&buff[10]);
       pFrame+=exheadersize;
     }
 
-    const int frameslength = m_nSize - exheadersize;
+    if (exheadersize + 10 > m_nSize || exheadersize < 6)
+      return false;
+
+    const uint32_t frameslength = m_nSize - exheadersize;
 
     CFrame frame;
-    int total = 0;
+    uint32_t total = 0;
     for(;;)
     {
       const int offset = frame.Load(pFrame, frameslength);

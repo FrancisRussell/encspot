@@ -106,7 +106,7 @@ private:
     
   int     GuessFrameLength();
   int     ProcessNextFrame(mp3data &data_out,info_lists *pInfoLists);
-  tstring GetLabelsFromBuffer(const char *buff, int len);
+  tstring GetLabelsFromBuffer(const char *buff, std::size_t len);
   tstring ReportOutOfSyncError(mp3data &main_data, const mp3header &hHeader);
   bool    CheckDone(mp3data &data, int pos);
   void    SetBaseInfo(mp3data &data, const mp3header &header);
