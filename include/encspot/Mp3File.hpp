@@ -41,8 +41,8 @@ struct thread_helper;
 class CMp3File : public CMediaFile
 {
 private:    
-  int m_nLastBits;
-  int m_lastBits;
+  unsigned m_nLastBits;
+  unsigned long m_lastBits;
 
 public:    
   static bool IsThisType(const tstring &fname)
@@ -124,7 +124,7 @@ private:
   bool        GetID3v2(mp3data &data);
   int            GetID3v1(mp3data &data);
 
-  unsigned long int readBits(int n);
+  unsigned long int readBits(unsigned n);
 };
 
 #endif

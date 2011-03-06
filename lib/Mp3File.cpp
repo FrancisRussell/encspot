@@ -1,5 +1,6 @@
 #include <string>
 #include <cstring>
+#include <climits>
 #include <vector>
 #include <algorithm>
 #include <encspot/Common.hpp>
@@ -98,7 +99,7 @@ static int ExtractI2(unsigned char *buf)
 // 100 toc
 
 
-CMp3File::CMp3File() 
+CMp3File::CMp3File() : m_nLastBits(0)
 {
 }
 
@@ -1181,38 +1182,29 @@ tstring CMp3File::GetLabelsFromBuffer(const char *buff, const std::size_t len)
   return TranslateLabel(label);
 }
 
-unsigned long int CMp3File::readBits(int n)
+unsigned long int CMp3File::readBits(unsigned n)
 {
   unsigned long int ret = 0;
-  int k;
-  unsigned char c;
 
-  while(m_nLastBits <= 24) {
-    const int tmp = getc(m_pFile);
-    c = tmp;
-    m_lastBits = m_lastBits << 8;
-    if (tmp != EOF) m_lastBits = m_lastBits | c;
-    m_nLastBits += 8;
+  while (n>0)
+  {
+    if (n > m_nLastBits)
+    {
+      while(m_nLastBits+CHAR_BIT <= sizeof(m_lastBits)*CHAR_BIT)
+      {
+        const int tmp = getc(m_pFile);
+        const unsigned char c = (tmp == EOF) ? 0 : static_cast<char>(tmp);
+        m_lastBits = (m_lastBits << CHAR_BIT) | c;
+        m_nLastBits += CHAR_BIT;
+      }
+    }
+
+    const unsigned shift = (n < m_nLastBits) ? n : m_nLastBits;
+    m_nLastBits -= shift;
+    ret = (ret << shift) | ((m_lastBits >> m_nLastBits) & ((1 << shift) - 1));
+    n -= shift;
   }
 
-  if (n <= m_nLastBits) k = n; else k = m_nLastBits;
-
-  ret = (m_lastBits >> (m_nLastBits - k)) & ((1 << k)-1);
-  m_nLastBits -= k;
-  n -= k;
-
-  while(m_nLastBits <= 24) {
-    const int tmp = getc(m_pFile);
-    c = tmp;
-    m_lastBits = m_lastBits << 8;
-    if (tmp != EOF) m_lastBits = m_lastBits | c;
-    m_nLastBits += 8;
-  }
-
-  ret = ret << n;
-  ret = ret | ((m_lastBits >> (m_nLastBits - n)) & ((1 << n)-1));
-  m_nLastBits -= n;
-  
   return ret;
 }
 
