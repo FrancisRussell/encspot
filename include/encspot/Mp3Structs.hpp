@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <sys/stat.h>
+#include "Common.hpp"
 
 extern const char *const genre_names[];
 extern const int tabsel_123[2][3][16];
