@@ -214,7 +214,7 @@ struct mp3data
 
   BOOL padding;
   BOOL scfsi;
-  BOOL scalefac;
+  int  scalefac;
   BOOL copyright;
   BOOL original;
 
