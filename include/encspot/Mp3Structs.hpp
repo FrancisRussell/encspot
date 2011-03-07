@@ -210,7 +210,7 @@ struct mp3data
 
   bool padding;
   bool scfsi;
-  bool scalefac;
+  int  scalefac;
   bool copyright;
   bool original;
 
