@@ -527,11 +527,11 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
     name = path.substr(pos+1,std::string::npos);
   
   tstring out;
-  out+=name + _T("\r\n");
-  out+=tstring(name.size(),_T('-'))+_T("\r\n\r\n");
+  out+=name + _T("\n");
+  out+=tstring(name.size(),_T('-'))+_T("\n\n");
   
-  out+= _T("Bitrates:\r\n");
-  out+=tstring(taglength,_T('-'))+_T("\r\n");
+  out+= _T("Bitrates:\n");
+  out+=tstring(taglength,_T('-'))+_T("\n");
 
   int max = 0;
   for (int i = 0;i<15;i++)
@@ -563,12 +563,12 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
       tstring percent = buff;
       percent = tstring(std::max<int>(7 - percent.size(),0),_T(' ')) + percent;
       out+=percent;
-      out+=_T("\r\n");
+      out+=_T("\n");
     }
   }
 
-  out+=tstring(taglength,_T('-'))+_T("\r\n");
-  out+=_T("\r\n");
+  out+=tstring(taglength,_T('-'))+_T("\n");
+  out+=_T("\n");
 
   std::vector< std::pair<tstring,tstring> > data_list; 
   data_list.push_back(std::make_pair(_T("Type"),    type));
@@ -589,12 +589,12 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
     const tstring& name = data_list[i].first;
     const tstring& data = data_list[i].second;
 
-    out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+    out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\n"); 
   }
 
   out+= get_header_report(data);
-  out+=_T("\r\n");  
-  out+=tag+_T("\r\n");
+  out+=_T("\n");  
+  out+=tag+_T("\n");
 
   return out;
 }
@@ -606,11 +606,11 @@ tstring mp3data_string::get_header_report(const mp3data &data)
   {
     const tstring name = _T("Lame Header");
     const tstring data = _T("No");
-    out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+    out+=name+tstring(std::max<int>(20-name.size(),0),_T(' ')) + _T(": ")+data + _T("\n"); 
     return out;
   }
 
-  out+=_T("\r\nLame Header:\r\n\r\n");
+  out+=_T("\nLame Header:\n\n");
 
   std::vector< std::pair<tstring, tstring> > data_list;
   data_list.push_back(std::make_pair(_T("Quality"),      lame_vbr_scale));
@@ -633,7 +633,7 @@ tstring mp3data_string::get_header_report(const mp3data &data)
   {
     const tstring& name = data_list[i].first;
     const tstring& data = data_list[i].second;
-    out+=name+tstring(std::max<int>(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\r\n"); 
+    out+=name+tstring(std::max<int>(30-name.size(),0),_T(' ')) + _T(": ")+data + _T("\n"); 
   }
 
   return out;
