@@ -319,7 +319,7 @@ int mp3data_string::update(const mp3data &data, bool monoquality)
 
   max_reservoir  = itoa10(data.max_reservoir);
   av_reservoir  = itoa10(data.av_reservoir);
-  sync_errors  = itoa10(data.sync_errors);
+  sync_errors  = data.sync_errors > 0 ? itoa10(data.sync_errors) : _T("none");
 
   //uses data already calculated
   const int quality = get_quality(data, monoquality);
@@ -577,10 +577,11 @@ tstring mp3data_string::get_report(const mp3data &data, const tstring &version)
   data_list.push_back(std::make_pair(_T("Frequency"),    freq + _T(" Hz")));
   data_list.push_back(std::make_pair(_T("Frames"),      frames));
   data_list.push_back(std::make_pair(_T("Length"),      length));
-  data_list.push_back(std::make_pair(_T("Max. Reservoir"),  max_reservoir));
   data_list.push_back(std::make_pair(_T("Av. Reservoir"),  av_reservoir));
+  data_list.push_back(std::make_pair(_T("Max. Reservoir"),  max_reservoir));
   data_list.push_back(std::make_pair(_T("Emphasis"),    emphasis));
   data_list.push_back(std::make_pair(_T("Scalefac"),    scalefac));
+  data_list.push_back(std::make_pair(_T("Sync Errors"),    sync_errors));
   data_list.push_back(std::make_pair(_T("Bad Last Frame"),  bad_last_frame));
   data_list.push_back(std::make_pair(_T("Encoder"),    encoder));
 
