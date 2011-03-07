@@ -1,15 +1,15 @@
 encspot (2.01+mtn20110307) unstable; urgency=low
 
-  * Regression fix. The original EncSpot code mistakenly used a BOOL to
-    store an integer value. When this was converted to a bool, scale
-    factor calculation broke.
-  * Fixed use of "\r\n" as line ending, which is invalid under both Windows and
-    *nix since "\n" is automatically converted to the native platform line
-    ending.
+  * Regression fix. The original EncSpot code used the BOOL type
+    (actually an int) to store the scale factor. When the code was refactored
+    to use the true bool type, scale factor calculation broke.
+  * Fixed use of "\r\n" as line ending, which is invalid under both
+    Windows and *nix since "\n" is automatically converted to the native
+    platform's line ending.
   * Fixes to compilation warnings observed under Ubuntu 10.04.
   * Minor update to manual page.
 
- -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 07 Mar 2011 01:54:35 +0000
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 07 Mar 2011 11:06:01 +0000
 
 encspot (2.01+mtn20110228) unstable; urgency=low
 
