@@ -1,3 +1,13 @@
+encspot (2.01+mtn20110307) unstable; urgency=low
+
+  * Regression fix. The original EncSpot code mistakenly used a BOOL to
+    store an integer value. When this was converted to a bool, scale
+    factor calculation broke.
+  * Fixes to compilation warnings observed under Ubuntu 10.04.
+  * Minor update to manual page.
+
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Mon, 07 Mar 2011 00:44:19 +0000
+
 encspot (2.01+mtn20110228) unstable; urgency=low
 
   * General code cleanup:
