@@ -1,3 +1,9 @@
+encspot (2.01+mtn20110729) unstable; urgency=low
+
+  * Make EncSpot report the presence of sync errors. 
+
+ -- Francis Russell <francis@unchartedbackwaters.co.uk>  Fri, 29 Jul 2011 00:12:38 +0100
+
 encspot (2.01+mtn20110307) unstable; urgency=low
 
   * Regression fix. The original EncSpot code used the BOOL type
