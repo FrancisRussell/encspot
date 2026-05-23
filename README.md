@@ -1,3 +1,5 @@
+# EncSpot
+
 It seems that GuerillaSoft have long since vanished. Before they did, they
 released the source for the Windows console-based version of EncSpot under a
 "New BSD" license.  This package is based on a version of that source modified
