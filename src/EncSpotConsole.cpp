@@ -28,7 +28,7 @@ int _tmain(int argc, TCHAR* argv[])
         mp3.ProcessFrames(true, data, -1, NULL, true /*DisableCache*/, NULL);
         data.quality = data_string.update(data, false);
         const tstring out_string = data_string.get_report(data, _T("EncSpot Console 2.0"));
-        _tprintf((out_string + _T("\n\n\n\n")).c_str());
+        _tprintf("%s", (out_string + _T("\n\n\n\n")).c_str());
       }
       catch (const tstring& s)
       {
