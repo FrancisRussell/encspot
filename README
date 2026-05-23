@@ -6,7 +6,6 @@ to compile under *nix (though hopefully cross-platform).
 Main changes to the source include:
 
 - CMake based build system.
-- Debian packaging.
 - General reformatting of source.
 - Removal of MSVC++ comment templates, pragmas etc..
 - Changes to compile under a modern g++.
