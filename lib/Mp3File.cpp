@@ -308,7 +308,7 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
   int start_loc;
   int stop_loc;
 
-  if (byte_locations.size() > stop_pos)
+  if (byte_locations.size() > static_cast<size_t>(stop_pos))
   {
     start_loc  = byte_locations[start_pos];
     stop_loc  = byte_locations[stop_pos];
@@ -358,7 +358,7 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
         if (data.xing_header.flags & FRAMES_FLAG)
         {
           const int new_frame_count = data.frameCount - (stop_pos - start_pos);
-          const int old_frame_count = ReadInt(&pb[startpos + 8]);
+          [[maybe_unused]] const int old_frame_count = ReadInt(&pb[startpos + 8]);
           CreateI4(&pb[startpos + 8], new_frame_count);
         }
 
@@ -376,24 +376,24 @@ bool CMp3File::Trim(const int64_t nStart, const int64_t nStop, const mp3data &da
           const int nOldLength = ExtractI4(&pb[nLenOffset]);
 
           const int nNewLength = nOldLength - (stop_loc - start_loc);
-          CreateI4(&pb[nLenOffset], nNewLength);        
+          CreateI4(&pb[nLenOffset], nNewLength);
 
           //adjust tag CRC
           const int nCRCLen = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E;
 
           uint16_t crc = 0;
-    
+
           for (int i = 0x00; i<nCRCLen; ++i)
             crc = CRC_update_lookup(pb[i],crc);
 
-          const int nOldCRC = ExtractI2(&pb[nCRCLen]);
-          CreateI2(&pb[nCRCLen], crc);  
+          [[maybe_unused]] const int nOldCRC = ExtractI2(&pb[nCRCLen]);
+          CreateI2(&pb[nCRCLen], crc);
         }
       }
-      
+
       fwrite(&pb[0], 1, nFramesize, pNewFile);
     }
-    
+
     nInitPos += nFramesize;
   }
 
@@ -458,7 +458,7 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
   int64_t start_loc;
   int64_t stop_loc;
 
-  if (byte_locations.size() > stop_pos)
+  if (byte_locations.size() > static_cast<size_t>(stop_pos))
   {
     start_loc  = byte_locations[start_pos];
     stop_loc  = byte_locations[stop_pos];
@@ -498,7 +498,7 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
       fseek(m_pFile, nPos, SEEK_SET);
       const std::size_t read = fread(&pb[0], 1, nFramesize, m_pFile);
 
-      if (read != nFramesize)
+      if (read != static_cast<std::size_t>(nFramesize))
         return false;
 
       const std::string buffer(reinterpret_cast<char*>(&pb[0]), nFramesize);
@@ -512,7 +512,7 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
         if (data.xing_header.flags & FRAMES_FLAG)
         {
           const int new_frame_count = data.frameCount - (stop_pos - start_pos);
-          const int old_frame_count = ReadInt(&pb[startpos + 8]);
+          [[maybe_unused]] const int old_frame_count = ReadInt(&pb[startpos + 8]);
           CreateI4(&pb[startpos + 8], new_frame_count);
         }
 
@@ -529,17 +529,17 @@ bool CMp3File::ExtractRegion(const int64_t nStart, const int64_t nStop, const mp
           const int nLenOffset = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E - 2 - 4;
           const int nOldLength = ExtractI4(&pb[nLenOffset]);
           const int nNewLength = nOldLength - (stop_loc - start_loc);
-          CreateI4(&pb[nLenOffset] ,nNewLength);        
+          CreateI4(&pb[nLenOffset] ,nNewLength);
 
           //adjust tag CRC
           const int nCRCLen = startpos + 0x0C + 7 * 0x10 + 0x10 + 0x0E;
           uint16_t crc = 0;
-    
+
           for (int i = 0x00; i<nCRCLen; ++i)
             crc = CRC_update_lookup(pb[i],crc);
 
-          const int nOldCRC = ExtractI2(&pb[nCRCLen]);
-          CreateI2(&pb[nCRCLen] ,crc);  
+          [[maybe_unused]] const int nOldCRC = ExtractI2(&pb[nCRCLen]);
+          CreateI2(&pb[nCRCLen] ,crc);
         }
       }
 
@@ -580,7 +580,7 @@ bool CMp3File::ProcessFrames(const bool bFull, mp3data &data_out, const int nFra
   MYASSERT(m_pFile);
 
   //Prelims...
-  lstrcpyn(data_out.path, m_tsFname.c_str(), sizeof(data_out.path)/sizeof(data_out.path[0]));
+  snprintf(data_out.path, sizeof(data_out.path)/sizeof(data_out.path[0]), "%s", m_tsFname.c_str());
 
   fseek(m_pFile, 0, SEEK_SET);
 
@@ -601,11 +601,11 @@ bool CMp3File::ProcessFrames(const bool bFull, mp3data &data_out, const int nFra
     return false;
 
   const int    id3v1pos  = GetID3v1(data_out);
-  const bool  bHasID3v2  = GetID3v2(data_out);      //changes file pointer....
+  [[maybe_unused]] const bool  bHasID3v2  = GetID3v2(data_out);      //changes file pointer....
   const int num = m_tag.GetCueFrameNumber();
   data_out.cue    = (num!=-1);
 
-  int nTestPos = ftell(m_pFile);
+  [[maybe_unused]] int nTestPos = ftell(m_pFile);
   SeekNextHeader();
   nTestPos = ftell(m_pFile);
   GetVBRTags(data_out);
@@ -614,7 +614,7 @@ bool CMp3File::ProcessFrames(const bool bFull, mp3data &data_out, const int nFra
 
   const tstring label = GetLabels(data_out.xing_header);
   if (!label.empty())
-    lstrcpyn(data_out.label,label.c_str(), sizeof(data_out.label)/sizeof(data_out.label[0]));
+    snprintf(data_out.label, sizeof(data_out.label)/sizeof(data_out.label[0]), "%s", label.c_str());
   else
     data_out.label[0] = 0;
 
@@ -900,10 +900,10 @@ int CMp3File::UpdateInfoFromHeader(mp3data &out_data, const mp3header &hHeader)
 
   if (hHeader.id) 
   {
-    int test;
-    if (hHeader.mode==3) 
+    [[maybe_unused]] int test;
+    if (hHeader.mode==3)
       test = readBits(5); // private_bits
-    else 
+    else
       test = readBits(3); // private_bits
   } 
   else 
@@ -1418,7 +1418,7 @@ int CMp3File::GetXingHeader(mp3data &data, unsigned char *buf)
   XHEADDATA *X = &data.xing_header;
 
   int i, head_flags;
-  int h_id, h_mode, h_sr_index;
+  [[maybe_unused]] int h_id, h_mode, h_sr_index;
   static int sr_table[4] = { 44100, 48000, 32000, 99999 };
 
   unsigned char *buf_start = buf;
@@ -1547,7 +1547,7 @@ bool CMp3File::GetVBRIHeader(mp3data &data, unsigned char *buf)
   VBRIDATA *X = &data.vbri_header;
 
 //  int i, head_flags;
-  int h_id, h_mode, h_sr_index;
+  [[maybe_unused]] int h_id, h_mode, h_sr_index;
 
   // get Xing header data
 
@@ -1670,7 +1670,7 @@ bool CMp3File::UpdateID3v1(id3v1 tag, const int track)
   if (pos==-1)
   {
     /*m_pFile = fopen(m_tsFname.c_str(), "wb");*/
-    const int succ = fseek(m_pFile, 0, SEEK_END);
+    [[maybe_unused]] const int succ = fseek(m_pFile, 0, SEEK_END);
   }
   else
   {
@@ -1678,7 +1678,7 @@ bool CMp3File::UpdateID3v1(id3v1 tag, const int track)
   }
 
   if (track!=0) tag.comment[29] = track;
-  const int written = fwrite(&tag, 1, sizeof(id3v1), m_pFile);
+  [[maybe_unused]] const int written = fwrite(&tag, 1, sizeof(id3v1), m_pFile);
 
   return true;
 }

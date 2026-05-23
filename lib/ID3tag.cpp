@@ -363,7 +363,7 @@ void CID3Tag::MakeTextFrame(const std::string& szID, const std::string &data)
   if (frame_num==-1)
   {
     CFrame frame;
-    strncpy(frame.id, szID.c_str(), sizeof(frame.id));
+    snprintf(frame.id, sizeof(frame.id), "%s", szID.c_str());
     m_frames.push_back(frame);
     frame_num = m_frames.size()-1;
   }
