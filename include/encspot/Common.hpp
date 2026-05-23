@@ -29,7 +29,7 @@ typedef UINT64        uint64_t;
 typedef char TCHAR;
 
 #define MAX_PATH          260
-#define MessageBox(a,b,c,d) printf(b)
+#define MessageBox(a,b,c,d) printf("%s", b)
 
 #define _T(x) x
 #define USES_CONVERSION
